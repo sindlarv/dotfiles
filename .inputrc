@@ -1,0 +1,43 @@
+# http://www.skorks.com/2009/09/bash-shortcuts-for-maximum-productivity/#comment-587673688
+# Up and Down together with some text
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+# Ctrl-p and Ctrl-n in history mode
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+
+# Alt-Left and Alt-Right
+"\e[1;3C": forward-word
+"\e[1;3D": backward-word
+"\e[3C": forward-word
+"\e[3D": backward-word
+# Ctrl-Left and Ctrl-Right
+"\e[1;5D": beginning-of-line
+"\e[1;5C": end-of-line
+"\e[5D": beginning-of-line
+"\e[5C": end-of-line
+"\e\e[D": forward-word
+"\e\e[C": backward-word
+# Ctrl-Up and Ctrl-Down
+"\e[1;5A": beginning-of-history
+"\e[1;5B": end-of-history
+"\e[5A": beginning-of-history
+"\e[5B": end-of-history
+
+# Home and End
+# VT
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+# kvt
+"\e[H":beginning-of-line
+"\e[F":end-of-line
+# rxvt and konsole (i.e. the KDE-app...)
+"\e[7~":beginning-of-line
+"\e[8~":end-of-line
+
+
+# http://linuxart.com/log/archives/2005/10/13/super-useful-inputrc/
+set completion-ignore-case on
+
+# indicating matching parenthesis
+set blink-matching-paren on

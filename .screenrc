@@ -1,0 +1,94 @@
+startup_message off
+vbell off
+msgwait 1
+msgminwait 0
+defutf8 on
+deflogin on
+
+hardstatus alwayslastline
+
+# The following line would turn off alternate Screen switching in xterms,
+# so that text in Screen will go into the xterm's scrollback buffer.
+# However, we are disabling this at this point, since byobu's
+# alt-pgup and alt-pgdn keybindings now exist.
+#termcapinfo xterm* ti@:te@
+altscreen on
+
+# Enable 256 color terminal
+attrcolor b ".I"
+# tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# erase background with current bg color
+defbce "on"
+
+# Log 10000 lines
+defscrollback 10000
+
+# Set per-user exchange
+#bufferfile $BYOBU_RUN_DIR/printscreen
+compacthist on
+
+# Monitor windows
+defmonitor on
+#activity ""
+
+# Fit to the current window size, useful with F5/reloads of the profile
+fit
+
+# Empty shell title by default, maximizes number of windows we can fit, F8 renames easily
+shelltitle "$ |bash"
+
+# Maintain SSH_AUTH_SOCK link
+#setenv SSH_AUTH_SOCK $BYOBU_CONFIG_DIR/.ssh-agent
+
+# Window tabs, second to last line
+#caption always "%1001`%?%-Lw%50L>%?%{=r}%n*%f %t%?(%u)%?%{-}%12`%?%+Lw%?%11` %=%12`%1002`%10`%<"
+
+# Status string
+#hardstatus string '%12`%1003`%=%1004`'
+#hardstatus string "[screen %n%?: %t%?] %h"
+#hardstatus string "[%n: %t] %h"
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %d/%m %c "
+#hardstatus string "%{.cb}%-W%{.rW}%50L> %n %t%{-}%+W%L<%-37=%{+b}%{.bc} %D %Y-%m-%d %{.bY}%c%{-b} %{.bc}%l "
+# blue on cyan.....^^^^^^
+# wlist up to current....^^^
+# brightwhite on red........^^^^^^
+# point to pos @ 50% avail area...^^^^^ (L = if trunc'ed, prefix -W with '...')
+# literal space........................^
+# current window number & title.........^^.^^
+# literal space..............................^
+# undo last color change......................^^^^
+# windowlist after current........................^^^
+# mark end of available area.........................^^^ (L = if trunc'ed, append +W with '...')
+# anchor everything after 38 chars from right margin....^^^^^ ('=' = anchor, '-' = rmargin)
+# bold on....................................................^^^^^
+# cyan on blue....................................................^^^^^^
+# Sat 2006-10-28.........................................................^^^^^^^^^^^
+# brightyellow on blue...............................................................^^^^^^
+# HH:MM....................................................................................^^
+# bold off...................................................................................^^^^^
+# cyan on blue.....................................................................................^^^^^^
+# current system load....................................................................................^^
+# literal space............................................................................................^
+
+
+# Keybindings
+#bindkey "^[[1;3D" eval 'prev' 'fit'			# alt(meta)-left | Previous Window
+#bindkey "^[[1;3C" eval 'next' 'fit'			# alt(meta)-right | Next Window
+bindkey "^[[1;2D" eval 'prev' 'fit'			# shift-left | Previous Window
+bindkey "^[[1;2C" eval 'next' 'fit'			# shift-right | Next Window
+#bindkey "^[[1;2A" focus up				# shift-up | focus up
+#bindkey "^[[1;2B" focus down				# shift-down | focus down
+bindkey "^[[1;5A" resize +1				# ctrl-up | resize +1
+bindkey "^[[1;5B" resize -1				# ctrl-down | resize -1
+#bindkey "^[[1;5D" resize -1				# ctrl-left | resize -1
+#bindkey "^[[1;5C" resize +1				# ctrl-right | resize +1
+register p "^[[5~"
+bindkey "^[[5;3~" eval 'msgwait 0' 'msgminwait 0' 'copy' 'process p' 'msgwait 1' 'echo "scrollback mode (alt-pgup / alt-pgdown)"' # alt-pageup | scrollback
+register n "^[[6~"
+bindkey "^[[6;3~" eval 'msgwait 0' 'msgminwait 0' 'copy' 'process n' 'msgwait 1' 'echo "scrollback mode (alt-pgup / alt-pgdown)"' # alt-pagedn | scrollback
+
+
+#screen -t log 0 watch -n 10 tail -n 5 /var/log/dmesg /var/log/syslog /var/log/auth.log
+#screen -t test 2
+#screen -t projekty 1

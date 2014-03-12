@@ -43,7 +43,7 @@ alias ...='cd ../..'
 alias .,='cd $OLDPWD'
 
 # vim related
-alias :q='exit'       
+alias :q='exit'
 # alias :m='pushd'  # store a path
 # alias :d='popd'       # pop a path
 
@@ -83,3 +83,15 @@ fi
 # https://www.ibm.com/developerworks/community/blogs/brian/entry/finding_command_names_on_aix_using_the_korn_shell?lang=en
 alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
 #alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq | grep -i $1'
+
+# Keychain related
+vsUNAME=$(uname -n)
+if [ "${vsUNAME}" == "T43" ]; then
+    vsKEYS="id_rsa 48E3BEB4"
+else
+    vsKEYS="private"
+fi
+
+alias keychain-enable='eval `keychain --nogui -quiet -quick --eval "${vsKEYS}"`'
+#alias keychain-enable='keychain --nogui -q -Q "${vsKEYS}" && . ~/.keychain/"${vsUNAME}"-sh' && . ~/.keychain/"${vsUNAME}"-sh-gpg'
+

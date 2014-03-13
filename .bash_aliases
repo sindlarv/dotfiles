@@ -3,9 +3,9 @@
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    alias ls='ls --color=auto --time-style=long-iso'
     alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
+    alias vdir='vdir --color=auto --time-style=long-iso'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -36,6 +36,9 @@ alias rm='rm -iv'
 alias mv='mv -iv'
 alias cp='cp -au'
 alias cr='cp -R'
+
+# history
+alias h='history | tail -15'
 
 # cd
 alias ..='cd ..'       # up
@@ -94,4 +97,5 @@ fi
 
 alias keychain-enable='eval `keychain --nogui -quiet -quick --eval "${vsKEYS}"`'
 #alias keychain-enable='keychain --nogui -q -Q "${vsKEYS}" && . ~/.keychain/"${vsUNAME}"-sh' && . ~/.keychain/"${vsUNAME}"-sh-gpg'
+
 

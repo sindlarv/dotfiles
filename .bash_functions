@@ -12,7 +12,7 @@ function p.grep() {
 # find duplicate files without 'fdupes' {{{
 function f.dupes () {
     echo "Scanning for duplicates: $@">&2
-    find $@ -type f -exec md5sum {} \; | sort -k 1 | uniq -w 32 -D 
+    find $@ -type f -exec md5sum {} \; | sort -k 1 | uniq -w 32 -D
 }
 # }}}
 
@@ -20,7 +20,7 @@ function f.dupes () {
 function each () {
     singular=0; items=`mktemp`
     while getopts ":s" Option; do
-        case $Option in 
+        case $Option in
             s) singular=1;;
         esac
     done
@@ -38,11 +38,11 @@ function each () {
 # open terminals over a tunnel {{{
 function s.ssh () {
     # example: s.ssh -d user@dest -g user@gateway
-    # grab/create a tunnel and connect    
+    # grab/create a tunnel and connect
     `s.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }'`
 
     # report still-running SSH processes
-    `which ps | grep ps` -o pid,euser:15,command -C ssh 
+    `which ps | grep ps` -o pid,euser:15,command -C ssh
 
 }
 # }}}
@@ -51,7 +51,7 @@ function s.ssh () {
 function s.scp () {
     # example: s.scp -d user@dest:/path/to/target -g user@gateway /path/to/recv/local
     # example: s.scp [/path/to/send/local/*...] user@dest:/path/to/target user@gateway
-    
+
     declare -a files
     declare mode= scp_tunnel= scp_cmd=
 
@@ -69,12 +69,12 @@ function s.scp () {
         until [[ $# -eq 0 || $1 =~ ^- && ${#1} -eq 2 ]]; do
             files[${#files[@]}]=${1};
             shift
-        done        
-    done    
+        done
+    done
 
     # grab/create a tunnel
     tunnel=`s.ssh_tunnel -d ${destination%%:*} -g ${gateway%%:*}`
-    
+
     [[ $mode == 'send' ]] && scp_cmd="scp ${files[@]} ${tunnel}";
     [[ $mode == 'recv' ]] && scp_cmd="scp ${tunnel} ${files[@]}";
     [[ ${#scp_cmd} -eq 0 ]] && echo "SCP Command has zero length! Something's up...">&2
@@ -83,7 +83,7 @@ function s.scp () {
     echo "Would do: [[${scp_cmd}]]; but we're still debugging.">&2;
 
     # report still-running SSH processes
-    `which ps | grep ps` -o pid,euser:15,command -C ssh 
+    `which ps | grep ps` -o pid,euser:15,command -C ssh
 
 }
 # }}}
@@ -108,7 +108,7 @@ function s.ssh_tunnel () {
     # make sure we're not trying to bind to an occupied port
     netstat -natl | sed '1,2d' | awk '{print $4}' | sed -r 's/(.*):([0-9]+)/\2/' | sort | uniq > ${usedports}
     while [ `grep ${gwport} ${usedports}` ]; do gwport=$(( RANDOM + 1024 )); done
-    
+
     # search for existing tunnels to destination, using the same gateway
     `which ps | grep ps` -o pid,command -C ssh | grep -E "[0-9]+:${DestHost}:22 ${GWUser}@${GWHost}" > ${usedports}
     if [[ `wc -l ${usedports} | cut -d ' ' -f 1` -gt "0" ]]; then
@@ -119,11 +119,11 @@ function s.ssh_tunnel () {
         # create a new tunnel
         echo "Creating new tunnel on port: ${gwport}">&2
         ssh -NfL ${gwport}:${DestHost}:22 ${GWUser}@${GWHost}
-    fi    
+    fi
     # clear our data from the disk
     rm ${usedports}
 
-    # print the connection info    
+    # print the connection info
     echo "${DestUser}@localhost ${gwport}";
 }
 # }}}
@@ -139,7 +139,7 @@ function f.arc () {
         d) directory=${OPTARG};;
         b) compress='--bzip2'; extension='bz2';;
         z) compress='--gzip'; extension='gz';;
-        v) verbose='v';;    
+        v) verbose='v';;
         r) delete='--remove-files';;
         f) target=${OPTARG};;
         *) echo "Unknown Option: ${Option} [$OPTARG]">&2;;
@@ -175,6 +175,49 @@ function g.passwd () {
         [ "$l" == "" ] && l=8
         tr -dc ${c} < /dev/urandom | head -c ${l} | xargs
 }
+# }}}
 
+# quick and dirty unarchiver {{{
+function f.unarc() {
+if [ -e "$1" ]; then
+    case $1 in
+        *.tar.bz2)  tar xvjf $1   ;;
+        *.tar.gz)   tar xvzf $1   ;;
+        *.bz2)      bunzip2 $1    ;;
+        *.rar)      unrar x $1    ;;
+        *.gz)       gunzip $1     ;;
+        *.tar)      tar xvf $1    ;;
+        *.tbz2)     tar xvjf $1   ;;
+        *.tgz)      tar xvzf $1   ;;
+        *.zip)      unzip $1      ;;
+        *.Z)        uncompress $1 ;;
+        *.7z)       7z x $1       ;;
+        *)          echo "'$1' cannot be extracted, unknown format" ;;
+    esac
+elif [ -z "$1" ]; then
+    echo "Specify a file to be extracted."
+else
+    echo "'$1' is an invalid file !"
+fi
+}
+# }}}
+
+# simple calculator {{{
+function calc() {
+local result=""
+result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+#                       └─ default (when `--mathlib` is used) is 20
+#
+if [[ "$result" == *.* ]]; then
+    # improve the output for decimal numbers
+    printf "$result" |
+    sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
+        -e 's/^-\./-0./' `# add "0" for cases like "-.5"`\
+        -e 's/0*$//;s/\.$//' # remove trailing zeros
+else
+    printf "$result"
+fi
+printf "\n"
+}
 # }}}
 

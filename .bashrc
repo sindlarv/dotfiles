@@ -5,9 +5,50 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# Color definitions (taken from Color Bash Prompt HowTo).
+# Some colors might look different of some terminals.
+# For example, I see 'Bold Red' as 'orange' on my screen,
+# hence the 'Green' 'BRed' 'Red' sequence I often use in my prompt.
+
+# Normal Colors
+BLACK='\e[0;30m'        # Black
+RED='\e[0;31m'          # Red
+GREEN='\e[0;32m'        # Green
+YELLOW='\e[0;33m'       # Yellow
+BLUE='\e[0;34m'         # Blue
+PURPLE='\e[0;35m'       # Purple
+CYAN='\e[0;36m'         # Cyan
+WHITE='\e[0;37m'        # White
+
+# Bold
+BBLACK='\e[1;30m'       # Black
+BRED='\e[1;31m'         # Red
+BGREEN='\e[1;32m'       # Green
+BYELlow='\e[1;33m'      # Yellow
+BBLUE='\e[1;34m'        # Blue
+BPURPLE='\e[1;35m'      # Purple
+BCYAN='\e[1;36m'        # Cyan
+BWHITE='\e[1;37m'       # White
+
+# Background
+ON_BLACK='\e[40m'       # Black
+ON_RED='\e[41m'         # Red
+ON_GREEN='\e[42m'       # Green
+ON_YELLOW='\e[43m'      # Yellow
+ON_BLUE='\e[44m'        # Blue
+ON_PURPLE='\e[45m'      # Purple
+ON_CYAN='\e[46m'        # Cyan
+ON_WHITE='\e[47m'       # White
+
+NC="\e[m"               # Color Reset
+
+ALERT=${BWhite}${On_Red} # Bold White on red background
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
+# don't store the following commands in history
+HISTIGNORE="&:bg:fg:ll:h"
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -15,6 +56,8 @@ shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
+# add date/time information
+HISTTIMEFORMAT="$(echo -e ${BCYAN})[%F %T]$(echo -e ${NC}) "
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -29,7 +72,8 @@ shopt -s checkwinsize
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-88color) color_prompt=yes;;
+    xterm-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -121,4 +165,3 @@ export LC_MEASUREMENT="cs_CZ.utf8"
 # editor
 export EDITOR="vim"
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

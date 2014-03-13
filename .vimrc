@@ -12,11 +12,22 @@ else
     set background=dark
 endif
 
+" vimdiff colors
+if &diff
+"    colorscheme some_other_scheme
+    highlight! link DiffText MatchParen
+"    highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green
+"    highlight DiffDelete cterm=none ctermfg=bg ctermbg=Red gui=none guifg=bg guibg=Red
+"    highlight DiffChange cterm=none ctermfg=bg ctermbg=Yellow gui=none guifg=bg guibg=Yellow
+"    highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta
+endif
+
 " color scheme related
 let g:solarized_contrast='high'
 let g:solarized_visibility='high'
 "let g:solarized_termtrans=1
-colorscheme solarized
+"colorscheme solarized
+colorscheme jellybeans
 
 " encoding
 set encoding=utf-8

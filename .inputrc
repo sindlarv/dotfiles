@@ -41,3 +41,10 @@ set completion-ignore-case on
 
 # indicating matching parenthesis
 set blink-matching-paren on
+
+# Show extra file information when completing, like `ls -F` does
+set visible-stats on
+
+# Use Alt/Meta + Delete to delete the preceding word
+#"\e[3;3~": kill-word
+

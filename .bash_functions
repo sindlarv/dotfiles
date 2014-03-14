@@ -203,7 +203,7 @@ fi
 # }}}
 
 # simple calculator {{{
-function calc() {
+function g.calc() {
 local result=""
 result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
 #                       └─ default (when `--mathlib` is used) is 20
@@ -218,6 +218,39 @@ else
     printf "$result"
 fi
 printf "\n"
+}
+# }}}
+
+# ssh-agent related {{{
+# http://mah.everybody.org/docs/ssh
+vsUNAME=$(uname -n)
+if [ "${vsUNAME}" == "T43" ]; then
+    SSH_KEYS="$HOME/.ssh/id_rsa"
+else
+    SSH_KEYS="$HOME/.ssh/Z89183 $HOME/.ssh/private"
+fi
+SSH_ENV="$HOME/.ssh/environment"
+
+function s.agent() {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo "succeeded"
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add "${SSH_KEYS}";
+}
+
+# Source SSH settings, if applicable
+function s.cache() {
+    if [ -f "${SSH_ENV}" ]; then
+        . "${SSH_ENV}" > /dev/null
+        #ps ${SSH_AGENT_PID} doesn't work under cywgin
+        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+            s.agent;
+        }
+    else
+        s.agent;
+    fi
 }
 # }}}
 

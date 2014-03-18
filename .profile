@@ -22,4 +22,13 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 export EDITOR="vim"
-export TERM="xterm-256color"
+
+# Set terminal based on number of colors detected
+if [ `tput colors` -eq 256 ]; then
+    export TERM='xterm-256color'
+elif [ `tput colors` -gt 80 ]; then
+    export TERM='xterm-88color'
+else
+    export TERM='xterm'
+fi
+

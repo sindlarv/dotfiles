@@ -13,7 +13,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Add an "alert" alias for long running commands. Use like so:
-#   sleep 10; alert
+#sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # ls
@@ -41,13 +41,13 @@ alias cr='cp -R'
 alias h='history | tail -15'
 
 # cd
-alias ..='cd ..'       # up
+alias ..='cd ..'        # up
 alias ...='cd ../..'
 alias .,='cd $OLDPWD'
 
 # vim related
 alias :q='exit'
-# alias :m='pushd'  # store a path
+# alias :m='pushd'      # store a path
 # alias :d='popd'       # pop a path
 
 # yum related

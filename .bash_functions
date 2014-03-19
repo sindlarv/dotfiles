@@ -237,7 +237,7 @@ function s.agent() {
     echo "succeeded"
     chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" > /dev/null
-    ssh-add "${SSH_KEYS}";
+    ssh-add "${SSH_KEYS}"
 }
 
 # Source SSH settings, if applicable

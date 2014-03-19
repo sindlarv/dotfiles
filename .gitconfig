@@ -1,0 +1,23 @@
+[user]
+	name = Vít Šindlář
+	email = sindlarv na gmail tecka com
+[credential]
+	helper = cache
+[difftool]
+	prompt = false
+[alias]
+	st = status
+	lo = log --name-status
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	di = diff
+	dc = diff --cached
+	div = difftool --tool=vimdiff --no-prompt
+	ci = commit
+	br = branch
+	co = checkout
+	ps = push
+	pl = pull
+[color]
+	diff = auto
+	status = auto
+	branch = auto

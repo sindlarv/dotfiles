@@ -22,12 +22,14 @@ if &diff
 "    highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta
 endif
 
-" color scheme related
+" solarized options
 let g:solarized_contrast='high'
 let g:solarized_visibility='high'
 "let g:solarized_termtrans=1
+
 "colorscheme solarized
 colorscheme jellybeans
+"colorscheme badwolf
 
 " encoding
 set encoding=utf-8
@@ -111,10 +113,10 @@ command L set list!
 set listchars=tab:▸\ ,eol:¬
 
 " reverse meaning of the Paste/New line keys
-nnoremap p P
-nnoremap P p
 nnoremap o O
 nnoremap O o
+nnoremap p P
+nnoremap P p
 
 " highlight redundant spaces and tabs
 let c_space_errors=1

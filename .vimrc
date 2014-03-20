@@ -53,9 +53,13 @@ set shiftwidth=4
 set expandtab
 
 " textwidth and format options
-set textwidth=80
+"set textwidth=80
 " show line at 80 chars
+" vim 7.3+
+" show just line
 "set colorcolumn=+1
+"highlight ColorColumn ctermbg=235 guibg=#2c2d27
+"let &colorcolumn="80,".join(range(120,999),",")
 
 " enable line numbering and highlighting the current one
 set number
@@ -111,6 +115,10 @@ nnoremap <cr> :noh<cr>
 command L set list!
 "  use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
+
+" characters at 80+ column
+map <F12> :/\%>80v./+<CR>
+"command W /\%>80v./+<CR>
 
 " reverse meaning of the Paste/New line keys
 nnoremap o O

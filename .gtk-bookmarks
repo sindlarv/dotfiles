@@ -9,3 +9,5 @@ smb://sindlarv@diskstation/home home@ds
 smb://sindlarv@diskstation/music music@ds
 smb://sindlarv@diskstation/video video@ds
 smb://sindlarv@diskstation/photo photo@ds
+smb://sindlarv@diskstation/install install@ds
+smb://sindlarv@diskstation/public public@ds

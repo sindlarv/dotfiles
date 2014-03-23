@@ -48,7 +48,7 @@ ALERT=${BWhite}${On_Red} # Bold White on red background
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 # don't store the following commands in history
-HISTIGNORE="&:bg:fg:ll:h"
+HISTIGNORE="&:bg:fg:h"
 
 # append to the history file, don't overwrite it
 shopt -s histappend

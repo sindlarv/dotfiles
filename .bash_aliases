@@ -87,3 +87,10 @@ fi
 alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
 #alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq | grep -i $1'
 
+# 't' - todo list manager
+# https://bitbucket.org/sjl/t/src
+if [ -f ~/bin/t/t.py ]; then
+    alias t='python ~/bin/t/t.py --task-dir ~/tasks --list tasks'
+    #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
+fi
+

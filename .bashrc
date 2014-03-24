@@ -24,7 +24,7 @@ WHITE='\e[0;37m'        # White
 BBLACK='\e[1;30m'       # Black
 BRED='\e[1;31m'         # Red
 BGREEN='\e[1;32m'       # Green
-BYELlow='\e[1;33m'      # Yellow
+BYELLOW='\e[1;33m'      # Yellow
 BBLUE='\e[1;34m'        # Blue
 BPURPLE='\e[1;35m'      # Purple
 BCYAN='\e[1;36m'        # Cyan
@@ -40,9 +40,13 @@ ON_PURPLE='\e[45m'      # Purple
 ON_CYAN='\e[46m'        # Cyan
 ON_WHITE='\e[47m'       # White
 
-NC="\e[m"               # Color Reset
-
-ALERT=${BWhite}${On_Red} # Bold White on red background
+# Other
+NC="\e[m"                   # Color Reset
+SMILEY=":)"                 # :)
+FROWNY=":("                 # :(
+FANCYX="\342\234\227"       # x
+CHECKMARK="\342\234\223"    # \/
+ALERT=${BWHITE}${ON_RED}    # Bold White on red background
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -83,30 +87,23 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+	    color_prompt=yes
     else
-	color_prompt=
+	    color_prompt=
     fi
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    #PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # http://stackoverflow.com/questions/22361722/simplifying-advanced-bash-prompt-variable-ps1-code?rq=1
+    PS1="${WHITE}\$? \$(if [[ \$? == 0 ]]; then echo \"${GREEN}${CHECKMARK}\"; else echo \"${RED}${FANCYX}\"; fi) $(if [[ ${EUID} == 0 ]]; then echo "${RED}\u"; else echo "${GREEN}\u"; fi)${BLUE} \w \$${NC} "
 else
     PS1='\u@\h:\w\$ '
 fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+#unset color_prompt force_color_prompt
 
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.

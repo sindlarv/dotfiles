@@ -59,6 +59,7 @@ if [ -e /usr/bin/yum ]; then
     alias yumd='yum deplist'
     alias yumf='yum provides'
     alias yumq='repoquery -l --installed'
+    alias yumh='sudo yum history'
 fi
 
 # apt related

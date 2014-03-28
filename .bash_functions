@@ -35,59 +35,6 @@ function each () {
 }
 # }}}
 
-# open terminals over a tunnel {{{
-function s.ssh () {
-    # example: s.ssh -d user@dest -g user@gateway
-    # grab/create a tunnel and connect
-    `s.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }'`
-
-    # report still-running SSH processes
-    `which ps | grep ps` -o pid,euser:15,command -C ssh
-
-}
-# }}}
-
-# push files over a tunnel to another machine {{{
-function s.scp () {
-    # example: s.scp -d user@dest:/path/to/target -g user@gateway /path/to/recv/local
-    # example: s.scp [/path/to/send/local/*...] user@dest:/path/to/target user@gateway
-
-    declare -a files
-    declare mode= scp_tunnel= scp_cmd=
-
-    until [ $# -eq 0 ]; do
-        OPTIND=1
-        while getopts "g:d:rs" Option; do
-            case $Option in
-                g) gateway=${OPTARG};;
-                d) destination=${OPTARG};;
-                s) mode='send';;
-                r) mode='recv';;
-            esac
-        done
-        shift $(( OPTIND - 1 ))
-        until [[ $# -eq 0 || $1 =~ ^- && ${#1} -eq 2 ]]; do
-            files[${#files[@]}]=${1};
-            shift
-        done
-    done
-
-    # grab/create a tunnel
-    tunnel=`s.ssh_tunnel -d ${destination%%:*} -g ${gateway%%:*}`
-
-    [[ $mode == 'send' ]] && scp_cmd="scp ${files[@]} ${tunnel}";
-    [[ $mode == 'recv' ]] && scp_cmd="scp ${tunnel} ${files[@]}";
-    [[ ${#scp_cmd} -eq 0 ]] && echo "SCP Command has zero length! Something's up...">&2
-
-    # tell me what you're going to do.
-    echo "Would do: [[${scp_cmd}]]; but we're still debugging.">&2;
-
-    # report still-running SSH processes
-    `which ps | grep ps` -o pid,euser:15,command -C ssh
-
-}
-# }}}
-
 # opens/selects tunnels as specified {{{
 function s.ssh_tunnel () {
     declare usedports=`mktemp` gwport=$(( RANDOM + 1024 )) Destination= GWUser=${SSHDefaultGateway%%@*} GWHost=${SSHDefaultGateway##*@};
@@ -155,6 +102,59 @@ function f.arc () {
 }
 # }}}
 
+# open terminals over a tunnel {{{
+function s.ssh () {
+    # example: s.ssh -d user@dest -g user@gateway
+    # grab/create a tunnel and connect
+    `s.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }'`
+
+    # report still-running SSH processes
+    `which ps | grep ps` -o pid,euser:15,command -C ssh
+
+}
+# }}}
+
+# push files over a tunnel to another machine {{{
+function s.scp () {
+    # example: s.scp -d user@dest:/path/to/target -g user@gateway /path/to/recv/local
+    # example: s.scp [/path/to/send/local/*...] user@dest:/path/to/target user@gateway
+
+    declare -a files
+    declare mode= scp_tunnel= scp_cmd=
+
+    until [ $# -eq 0 ]; do
+        OPTIND=1
+        while getopts "g:d:rs" Option; do
+            case $Option in
+                g) gateway=${OPTARG};;
+                d) destination=${OPTARG};;
+                s) mode='send';;
+                r) mode='recv';;
+            esac
+        done
+        shift $(( OPTIND - 1 ))
+        until [[ $# -eq 0 || $1 =~ ^- && ${#1} -eq 2 ]]; do
+            files[${#files[@]}]=${1};
+            shift
+        done
+    done
+
+    # grab/create a tunnel
+    tunnel=`s.ssh_tunnel -d ${destination%%:*} -g ${gateway%%:*}`
+
+    [[ $mode == 'send' ]] && scp_cmd="scp ${files[@]} ${tunnel}";
+    [[ $mode == 'recv' ]] && scp_cmd="scp ${tunnel} ${files[@]}";
+    [[ ${#scp_cmd} -eq 0 ]] && echo "SCP Command has zero length! Something's up...">&2
+
+    # tell me what you're going to do.
+    echo "Would do: [[${scp_cmd}]]; but we're still debugging.">&2;
+
+    # report still-running SSH processes
+    `which ps | grep ps` -o pid,euser:15,command -C ssh
+
+}
+# }}}
+
 # send HUP to the named process {{{
 function p.hup () {
     kill -HUP `pidof $1`;
@@ -218,39 +218,6 @@ else
     printf "$result"
 fi
 printf "\n"
-}
-# }}}
-
-# ssh-agent related {{{
-# http://mah.everybody.org/docs/ssh
-vsUNAME=$(uname -n)
-if [ "${vsUNAME}" == "T43" ]; then
-    SSH_KEYS="$HOME/.ssh/id_rsa"
-else
-    SSH_KEYS="$HOME/.ssh/Z89183 $HOME/.ssh/private"
-fi
-SSH_ENV="$HOME/.ssh/environment"
-
-function s.agent() {
-    echo "Initialising new SSH agent..."
-    ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    echo "succeeded"
-    chmod 600 "${SSH_ENV}"
-    . "${SSH_ENV}" > /dev/null
-    ssh-add "${SSH_KEYS}"
-}
-
-# Source SSH settings, if applicable
-function s.cache() {
-    if [ -f "${SSH_ENV}" ]; then
-        . "${SSH_ENV}" > /dev/null
-        #ps ${SSH_AGENT_PID} doesn't work under cywgin
-        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-            s.agent;
-        }
-    else
-        s.agent;
-    fi
 }
 # }}}
 

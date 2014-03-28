@@ -162,3 +162,8 @@ export LC_MEASUREMENT="cs_CZ.utf8"
 # editor
 export EDITOR="vim"
 
+# keychain
+if [ -f ~/.keychain/${HOSTNAME}-sh ]; then
+    source ~/.keychain/${HOSTNAME}-sh
+fi
+

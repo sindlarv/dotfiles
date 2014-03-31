@@ -48,3 +48,21 @@ set visible-stats on
 # Use Alt/Meta + Delete to delete the preceding word
 #"\e[3;3~": kill-word
 
+# When autocompleting symlinks to directories, immediately add a trailing "/".
+set mark-symlinked-directories on
+
+# Flip through autocompletion matches with Shift-Tab.
+# "\e[Z": menu-complete
+#
+# Do not autocomplete hidden files ("dot files") unless the pattern explicitly
+# begins with a dot.
+set match-hidden-files off
+
+# https://github.com/janmoesen/tilde
+# Be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set skip-completed-text on
+

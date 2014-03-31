@@ -38,7 +38,7 @@ fi
 # https://spaces.seas.harvard.edu/display/USERDOCS/Storing+Your+Keys+-+SSH-Agent,+Agent+Forwarding,+and+Keychain
 
 # keys to use
-CERTFILES="Z89183"
+CERTFILES="Z89183 private"
 
 # find the keychain script
 KEYCHAIN=
@@ -76,4 +76,35 @@ if [ -n $KEYCHAIN ] ; then
 fi
 
 unset CERTFILES KEYCHAIN
+
+
+# Make less the default pager, and specify some useful defaults.
+less_options=(
+# If the entire text fits on one screen, just show it and quit. (Be morei like
+# "cat" and less like "more".)
+    --quit-if-one-screen
+
+# Do not clear the screen first.
+    --no-init
+
+# Like "smartcase" in Vim: ignore case unless the search pattern is mixed.
+    --ignore-case
+
+# Do not automatically wrap long lines.
+    --chop-long-lines
+
+# Allow ANSI colour escapes, but no other escapes.
+    --RAW-CONTROL-CHARS
+
+# Do not complain when we are on a dumb terminal.
+    --dumb
+);
+export LESS="${less_options[*]}";
+unset less_options;
+export PAGER='less';
+
+# Make "less" transparently unpack archives etc.
+if [ -x /usr/bin/lesspipe ]; then
+    eval $(/usr/bin/lesspipe);
+fi;
 

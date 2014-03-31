@@ -37,9 +37,6 @@ fi
 #----------------------
 # https://spaces.seas.harvard.edu/display/USERDOCS/Storing+Your+Keys+-+SSH-Agent,+Agent+Forwarding,+and+Keychain
 
-# keys to use
-CERTFILES="Z89183 private"
-
 # find the keychain script
 KEYCHAIN=
 [ -x /usr/bin/keychain ] && KEYCHAIN=/usr/bin/keychain
@@ -47,6 +44,14 @@ KEYCHAIN=
 KEYCHAIN_ARGS="--nogui"
 
 HOSTNAME=`hostname`
+
+# keys to use
+if [ "$HOSTNAME" == "T43" ]; then
+    CERTFILES="id_rsa"
+else
+    CERTFILES="Z89183 private"
+fi
+
 if [ -n $KEYCHAIN ] ; then
 
 #

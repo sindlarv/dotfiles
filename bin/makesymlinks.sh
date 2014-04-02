@@ -7,7 +7,7 @@
 # Variables
 
 dir=~/.dotfiles                    # dotfiles directory
-olddir=~/.dotfiles_old             # old dotfiles backup directory
+olddir=~/.backup                   # old dotfiles backup directory
 # list of files/folders to symlink in homedir
 files="bashrc vimrc vim mkshrc bash_aliases bash_functions inputrc tmux.conf bash_profile"
 
@@ -25,7 +25,7 @@ echo "...done"
 # symlinks
 for file in $files; do
     echo "Moving any existing dotfiles from ~ to $olddir"
-    mv ~/.$file $olddir/
+    [ -f ~/."$file" ] && mv ~/.$file $olddir/
     echo "Creating symlink to $file in home directory."
     ln -s $dir/.$file ~/.$file
 done

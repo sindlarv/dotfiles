@@ -1,4 +1,5 @@
 #!/bin/bash
+# http://brainscraps.wikia.com/wiki/Resurrecting_tmux_Sessions_After_Reboot
 #######################
 # Usage
 usage() {
@@ -8,10 +9,10 @@ usage() {
 
 #######################
 # Config Variables
-max_backups=12
+max_backups=5
 ignore_session_list="hosts"
-backup_dir=~/.resurrect/tmux_snapshot
-export PATH="${PATH}:/usr/local/bin"
+backup_dir=~/.cache/tmux_snapshot
+#export PATH="${PATH}:/usr/local/bin"
 
 #######################
 # Use prompt to get state of pane.
@@ -87,6 +88,9 @@ if [ "${task}" = 'backup' ] ;then
     done
     session_size=$(tmux list-sessions | awk -F'[' '/^'${session}': / {print $2}' | awk -F']' '{print $1}')
     echo "${session_size}" >${backup_dir}/${session}.size
+    ##sindlarv: save also window names
+    window_names=$(tmux list-windows | cut -d" " -f1,2)
+    echo "${window_names}" >${backup_dir}/${session}.names
     for window in $(tmux list-windows -t ${session} | awk -F: '{print $1}') ;do
       for pane in $(tmux list-panes -t ${session}:${window} | awk -F: '{print $1}') ;do
         ##backup pane layout
@@ -123,7 +127,8 @@ elif [ "${task}" = 'restore' ] ;then
   fi
 
   ##Restore proper number of sessions, windows, and panes
-  for session in $(ls ${backup_dir} | grep -v '\.size$' | cut -d: -f1 | sort -du) ;do
+  ##sindlarv: in addition, we need to filter out the file containing window names
+  for session in $(ls ${backup_dir} | grep -v '\.size$' | grep -v '\.names$' | cut -d: -f1 | sort -du) ;do
     window_list=$(ls ${backup_dir} | awk -F: '/^'${session}':/ {print $2}' | cut -d\. -f1 | sort -nu)
     window_list_rev=$(echo "${window_list}" | sort -nr)
     num_windows=$(echo ${window_list} | wc -w)
@@ -132,14 +137,18 @@ elif [ "${task}" = 'restore' ] ;then
     echo "* Creating new session, \"${session}\"..."
     session_width=$(cut -d x -f 1 ${backup_dir}/${session}.size)
     session_height=$(($(cut -d x -f 2 ${backup_dir}/${session}.size)+1))
-    tmux new-session -d -s ${session} -x ${session_width} -y ${session_height}
+    ##sindlarv: restore the name of the first window
+    window_name_first=$(sed '1q;d' ${backup_dir}/${session}.names | cut -d" " -f 2)
+    tmux new-session -d -n ${window_name_first} -s ${session} -x ${session_width} -y ${session_height}
 
     ##create additional windows if # of windows is > 1
     if [ ${num_windows} -gt 1 ] ;then
       echo "* Creating $((${num_windows}-1)) additional windows for session, \"${session}\"..."
       i=1
       while [ ${i} -lt ${num_windows} ] ;do
-        tmux new-window -d -a -t ${session}:${base_index}
+        ##sindlarv: restore the names of the rest of windows
+        window_name_other=$(sed $((${i}+1))'q;d' ${backup_dir}/${session}.names | cut -d" " -f 2)
+        tmux new-window -d -a -n ${window_name_other} -t ${session}:${base_index}
         i=$((${i}+1))
       done
     fi

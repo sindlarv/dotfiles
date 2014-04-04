@@ -46,19 +46,17 @@ KEYCHAIN_ARGS="--nogui"
 HOSTNAME=`hostname`
 
 # keys to use
-if [ "$HOSTNAME" == "T43" ]; then
-    CERTFILES="id_rsa"
-else
-    CERTFILES="Z89183 private"
-fi
+SSHDIR="$HOME/.ssh"
+i=0; for files in ${SSHDIR}/*.pub; do certs[$i]=$(basename ${files%%\.pub}); i=$(expr $i + 1); done
+#echo ${certs[*]}
+CERTFILES=${certs[*]}
 
 if [ -n $KEYCHAIN ] ; then
 
-#
 # If there's already a ssh-agent running, then we know we're on a desktop or
 # laptop (i.e. a client), so we should run keychain so that we can set up our
 # keys, please.
-#
+
     if [ ! "" = "$SSH_AGENT_PID" ]; then
 
         echo "Keychain: SSH_AGENT_PID is set, so running keychain to load keys."
@@ -67,11 +65,10 @@ if [ -n $KEYCHAIN ] ; then
 # Else no ssh-agent configured
     else
 
-#
 # Offer to run keychain only if no SSH_AUTH_SOCK is set, and only if we aren't
 # at the end of a ssh connection with agent forwarding enabled (since then we
 # won't need ssh-agent here anyway)
-#
+
         if [ -z $SSH_AUTH_SOCK ]; then
             echo "Keychain: Found no SSH_AUTH_SOCK, so running keychain to \
                   start ssh-agent & load keys."

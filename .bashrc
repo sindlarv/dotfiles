@@ -7,46 +7,47 @@
 
 # Color definitions (taken from Color Bash Prompt HowTo).
 # Some colors might look different of some terminals.
-# For example, I see 'Bold Red' as 'orange' on my screen,
-# hence the 'Green' 'BRed' 'Red' sequence I often use in my prompt.
+
+# Fix for long lines not being correctly rendered in bash
+# https://bugs.r-project.org/bugzilla3/show_bug.cgi?id=14800
 
 # Normal Colors
-BLACK='\e[0;30m'        # Black
-RED='\e[0;31m'          # Red
-GREEN='\e[0;32m'        # Green
-YELLOW='\e[0;33m'       # Yellow
-BLUE='\e[0;34m'         # Blue
-PURPLE='\e[0;35m'       # Purple
-CYAN='\e[0;36m'         # Cyan
-WHITE='\e[0;37m'        # White
+BLACK="\001\e[0;30m\002"        # Black
+RED="\001\e[0;31m\002"          # Red
+GREEN="\001\e[0;32m\002"        # Green
+YELLOW="\001\e[0;33m\002"       # Yellow
+BLUE="\001\e[0;34m\002"         # Blue
+PURPLE="\001\e[0;35m\002"       # Purple
+CYAN="\001\e[0;36m\002"         # Cyan
+WHITE="\001\e[0;37m\002"        # White
 
 # Bold
-BBLACK='\e[1;30m'       # Black
-BRED='\e[1;31m'         # Red
-BGREEN='\e[1;32m'       # Green
-BYELLOW='\e[1;33m'      # Yellow
-BBLUE='\e[1;34m'        # Blue
-BPURPLE='\e[1;35m'      # Purple
-BCYAN='\e[1;36m'        # Cyan
-BWHITE='\e[1;37m'       # White
+BBLACK="\001\e[1;30m\002"       # Black
+BRED="\001\e[1;31m\002"         # Red
+BGREEN="\001\e[1;32m\002"       # Green
+BYELLOW="\001\e[1;33m\002"      # Yellow
+BBLUE="\001\e[1;34m\002"        # Blue
+BPURPLE="\001\e[1;35m\002"      # Purple
+BCYAN="\001\e[1;36m\002"        # Cyan
+BWHITE="\001\e[1;37m\002"       # White
 
 # Background
-ON_BLACK='\e[40m'       # Black
-ON_RED='\e[41m'         # Red
-ON_GREEN='\e[42m'       # Green
-ON_YELLOW='\e[43m'      # Yellow
-ON_BLUE='\e[44m'        # Blue
-ON_PURPLE='\e[45m'      # Purple
-ON_CYAN='\e[46m'        # Cyan
-ON_WHITE='\e[47m'       # White
+ON_BLACK="\001\e[40m\002"       # Black
+ON_RED="\001\e[41m\002"         # Red
+ON_GREEN="\001\e[42m\002"       # Green
+ON_YELLOW="\001\e[43m\002"      # Yellow
+ON_BLUE="\001\e[44m\002"        # Blue
+ON_PURPLE="\001\e[45m\002"      # Purple
+ON_CYAN="\001\e[46m\002"        # Cyan
+ON_WHITE="\001\e[47m\002"       # White
 
 # Other
-NC="\e[m"                   # Color Reset
-SMILEY=":)"                 # :)
-FROWNY=":("                 # :(
-FANCYX="\342\234\227"       # x
-CHECKMARK="\342\234\223"    # \/
-ALERT=${BWHITE}${ON_RED}    # Bold White on red background
+NC="\001\e[0m\002"              # Color Reset
+SMILEY=":)"                     # :)
+FROWNY=":("                     # :(
+FANCYX="\342\234\227"           # [✘] / \342\234\227
+CHECKMARK="\342\234\223"        # [✔] / \342\234\223
+ALERT=${BWHITE}${ON_RED}        # Bold White on red background
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -96,15 +97,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    #PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # http://stackoverflow.com/questions/22361722/simplifying-advanced-bash-prompt-variable-ps1-code?rq=1
-    PS1="${WHITE}\$? \$(if [[ \$? == 0 ]]; then echo \"${GREEN}${CHECKMARK}\"; else echo \"${RED}${FANCYX}\"; fi) $(if [[ ${EUID} == 0 ]]; then echo "${RED}\u"; else echo "${GREEN}\u"; fi)${BLUE} \w \$${NC} "
-else
-    PS1='\u@\h:\w\$ '
-fi
-#unset color_prompt force_color_prompt
-
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
@@ -125,24 +117,16 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+if [ "$color_prompt" = yes ]; then
+    #PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PROMPT_COMMAND=__prompt_command
+else
+    PS1='\u@\h:\w\$ '
+fi
+#unset color_prompt force_color_prompt
+
 # http://www.skorks.com/2009/09/bash-shortcuts-for-maximum-productivity/#comment-587673785
 /bin/stty -ixon
-
-# http://rc98.net/screen
-# Commented out (in /etc/bash.bashrc), don't overwrite xterm -T "title" -n "icontitle" by default.
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${KCH_HOST}:${PWD}\007"'
-    ;;
-# special escaping for Screen
-screen*)
-    PROMPT_COMMAND='echo -ne "\033_${USER}@${KCH_HOST}:${PWD}\033\\"'
-    ;;
-*)
-    ;;
-esac
-
 
 # user locale
 #export LANG=

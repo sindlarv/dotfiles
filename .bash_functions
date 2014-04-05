@@ -179,45 +179,93 @@ function g.passwd () {
 
 # quick and dirty unarchiver {{{
 function f.unarc() {
-if [ -e "$1" ]; then
-    case $1 in
-        *.tar.bz2)  tar xvjf $1   ;;
-        *.tar.gz)   tar xvzf $1   ;;
-        *.bz2)      bunzip2 $1    ;;
-        *.rar)      unrar x $1    ;;
-        *.gz)       gunzip $1     ;;
-        *.tar)      tar xvf $1    ;;
-        *.tbz2)     tar xvjf $1   ;;
-        *.tgz)      tar xvzf $1   ;;
-        *.zip)      unzip $1      ;;
-        *.Z)        uncompress $1 ;;
-        *.7z)       7z x $1       ;;
-        *)          echo "'$1' cannot be extracted, unknown format" ;;
-    esac
-elif [ -z "$1" ]; then
-    echo "Specify a file to be extracted."
-else
-    echo "'$1' is an invalid file !"
-fi
+    if [ -e "$1" ]; then
+        case $1 in
+            *.tar.bz2)  tar xvjf $1   ;;
+            *.tar.gz)   tar xvzf $1   ;;
+            *.bz2)      bunzip2 $1    ;;
+            *.rar)      unrar x $1    ;;
+            *.gz)       gunzip $1     ;;
+            *.tar)      tar xvf $1    ;;
+            *.tbz2)     tar xvjf $1   ;;
+            *.tgz)      tar xvzf $1   ;;
+            *.zip)      unzip $1      ;;
+            *.Z)        uncompress $1 ;;
+            *.7z)       7z x $1       ;;
+            *)          echo "'$1' cannot be extracted, unknown format" ;;
+        esac
+    elif [ -z "$1" ]; then
+        echo "Specify a file to be extracted."
+    else
+        echo "'$1' is an invalid file !"
+    fi
 }
 # }}}
 
 # simple calculator {{{
 function g.calc() {
-local result=""
-result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
-#                       └─ default (when `--mathlib` is used) is 20
-#
-if [[ "$result" == *.* ]]; then
-    # improve the output for decimal numbers
-    printf "$result" |
-    sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
-        -e 's/^-\./-0./' `# add "0" for cases like "-.5"`\
-        -e 's/0*$//;s/\.$//' # remove trailing zeros
-else
-    printf "$result"
-fi
-printf "\n"
+    local result=""
+    result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+    #                       └─ default (when `--mathlib` is used) is 20
+
+    if [[ "$result" == *.* ]]; then
+        # improve the output for decimal numbers
+        printf "$result" |
+        sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
+            -e 's/^-\./-0./' `# add "0" for cases like "-.5"`\
+            -e 's/0*$//;s/\.$//' # remove trailing zeros
+    else
+        printf "$result"
+    fi
+    printf "\n"
+}
+# }}}
+
+# Status of last command (for prompt) {{{
+# Based on http://www.terminally-incoherent.com/blog/2013/01/14/whats-in-your-bash-prompt/
+function __prompt_command() {
+    # capture the exit status of the last command
+    EXIT="$?"
+    PS1=""
+
+    if [ -f ~/bin/t/t.py ]; then PS1+="[$(t | wc -l | sed -e's/ *//')] "; fi
+
+    # if logged in via ssh shows the ip of the client
+    if [ -n "${SSH_CLIENT}" ]; then PS1+="${YELLOW}("${$SSH_CLIENT%% *}")${NC}"; fi
+
+    # debian chroot stuff (take it or leave it)
+    if [ -f /etc/debian_version ]; then PS1+="${debian_chroot:+($debian_chroot)}"; fi
+
+    # basic information (user@host:path)
+    PS1+="${GREEN}\u${NC} ${BLUE}\w${NC} "
+
+    # check if inside git repo
+    local git_status="`git status -unormal 2>&1`"
+    if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+        # parse the porcelain output of git status
+        if [[ "$git_status" =~ nothing\ to\ commit ]]; then
+            local Color_On=${GREEN}
+        elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
+            local Color_On=${PURPLE}
+        else
+            local Color_On=${RED}
+        fi
+
+        if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+            branch=${BASH_REMATCH[1]}
+        else
+            # Detached HEAD. (branch=HEAD is a faster alternative.)
+            branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
+        fi
+
+        # add the result to prompt
+        PS1+="${Color_On}[$branch]${NC} "
+    fi
+
+    # prompt $ or # for root
+    # fix for exit status upon Ctrl-Z
+    # http://unix.stackexchange.com/questions/62173/exit-status-of-148-upon-ctrlz
+    if [ $EXIT -eq 0 -o $(kill -l $?) = TSTP ]; then PS1+="${GREEN}\$${NC} "; else PS1+="${BRED}\$${NC} "; fi
 }
 # }}}
 

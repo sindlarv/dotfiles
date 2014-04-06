@@ -5,6 +5,9 @@
 Session.vim
 .netrwhist
 *~
-# other
 .vim/bundle/*
 .vim/view/*
+# other
+*.gpg
+random_seed
+gpg-agent-info-*

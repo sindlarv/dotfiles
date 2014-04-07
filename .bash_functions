@@ -205,7 +205,7 @@ function f.unarc() {
 # simple calculator {{{
 function g.calc() {
     local result=""
-    result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+    result="$(printf "scale=3;$*\n" | bc --mathlib | tr -d '\\\n')"
     #                       └─ default (when `--mathlib` is used) is 20
 
     if [[ "$result" == *.* ]]; then

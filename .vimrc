@@ -1,3 +1,7 @@
+" Some basic information
+" For arguments of has() function see :help feature-list
+" Similarly, arguments of exists() can be seen via :help option-list
+
 "set nocompatible
 
 " enable 256 color mode if terminal supports it
@@ -38,8 +42,14 @@ set encoding=utf-8
 set ignorecase
 set smartcase
 
-" open files in case insensitive manner, requires VIm 7.3.x
-"set wildignorecase
+" Ignore case when doing completion; if needed in general for all operations,
+" see fileignorecase (set by default on systems where case in file names is not
+" considered at all)
+" The following requires VIm 7.3.x
+" wildignorecase is an option, not feature; use exists() instead
+if exists('wildignorecase')
+    set wildignorecase
+endif
 
 " complete files like a shell
 set wildmode=list:longest
@@ -54,12 +64,14 @@ set expandtab
 
 " textwidth and format options
 "set textwidth=80
-" show line at 80 chars
-" vim 7.3+
-" show just line
-"set colorcolumn=+1
-"highlight ColorColumn ctermbg=235 guibg=#2c2d27
-"let &colorcolumn="80,".join(range(120,999),",")
+" show line at 80 chars, requires VIm 7.3+
+"if v:version >= 730
+if exists('+colorcolumn')
+    " show just line
+    set colorcolumn=+1
+    highlight ColorColumn ctermbg=235 guibg=#2c2d27
+    let &colorcolumn="80,".join(range(120,999),",")
+endif
 
 " enable line numbering and highlighting the current one
 set number

@@ -192,6 +192,7 @@ function f.unarc() {
             *.zip)      unzip $1      ;;
             *.Z)        uncompress $1 ;;
             *.7z)       7z x $1       ;;
+            *.lha)      lha x $1      ;;
             *)          echo "'$1' cannot be extracted, unknown format" ;;
         esac
     elif [ -z "$1" ]; then

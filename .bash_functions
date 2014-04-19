@@ -232,7 +232,7 @@ function __prompt_command() {
     if [ -f ~/bin/t/t.py ]; then PS1+="[$(t | wc -l | sed -e's/ *//')] "; fi
 
     # if logged in via ssh shows the ip of the client
-    if [ -n "${SSH_CLIENT}" ]; then PS1+="${YELLOW}("${$SSH_CLIENT%% *}")${NC}"; fi
+    if [ -n "${SSH_CLIENT}" ]; then PS1+="${YELLOW}("${SSH_CLIENT%% *}")${NC} "; fi
 
     # debian chroot stuff (take it or leave it)
     if [ -f /etc/debian_version ]; then PS1+="${debian_chroot:+($debian_chroot)}"; fi

@@ -1,11 +1,22 @@
 # vim: set filetype=sh:
 
+# naive check for busybox machines
+BBOX=$(ls --help 2>&1 | grep BusyBox | wc -l)
+ARGLSDIR=""
+ARGLSTIM=""
+if [ "${BBOX}" == 0 ]; then
+    ARGLSDIR="--group-directories-first"
+    ARGLSTIM="--time-style=long-iso"
+    ARGCPUPD="-u"
+    ARGDFFSI="-T"
+fi
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto --time-style=long-iso'
+    alias ls="ls --color=auto ${ARGLSTIM}"
     alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto --time-style=long-iso'
+    alias vdir="vdir --color=auto ${ARGLSTIM}"
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -17,24 +28,24 @@ fi
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # ls
-alias l='ls -l --group-directories-first --si'   # list items in columns with indicators
-alias ll='ls -la --group-directories-first --si' # long listing format and si units
-alias la='ls -a --group-directories-first'       # list all
-alias l.='ls -d .* --group-directories-first'    # list configuration related files/folders
-alias lr='ls -R --group-directories-first'       # recursive
-alias lc='ls -CF'      # list items in columns with indicators
-alias lx='ls -lX'      # sort by extension
-alias lS='ls -lS'      # sort by size
-alias lt='ls -lt'      # sort by mod time, reverse order
+alias l="ls -lh ${ARGLSDIR}"    # list items in columns with indicators
+alias ll="ls -lah ${ARGLSDIR}"  # long listing format and si units
+alias la="ls -a ${ARGLSDIR}"    # list all
+alias l.="ls -d .* ${ARGLSDIR}" # list configuration related files/folders
+alias lr="ls -R ${ARGLSDIR}"    # recursive
+alias lc='ls -CF'               # list items in columns with indicators
+alias lx='ls -lX'               # sort by extension
+alias lS='ls -lS'               # sort by size
+alias lt='ls -lt'               # sort by mod time, reverse order
 
 # df and du
-alias du='du --si'     # human readable units
-alias df='df -kT --si' # human readable units
+alias du='du -h'                # human readable units
+alias df="df -kh ${ARGDFFSI}"   # human readable units
 
 # rm, cp and mv
-alias rm='rm -iv'
-alias mv='mv -iv'
-alias cp='cp -au'
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp="cp -a ${ARGCPUPD}"
 alias cr='cp -R'
 
 # history
@@ -85,12 +96,12 @@ fi
 
 # AIX command completion help
 # https://www.ibm.com/developerworks/community/blogs/brian/entry/finding_command_names_on_aix_using_the_korn_shell?lang=en
-alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
+#alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
 #alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq | grep -i $1'
 
 # 't' - todo list manager
 # https://bitbucket.org/sjl/t/src
-if [ -f ~/bin/t/t.py ]; then
+if [ -e ~/bin/t/t.py ]; then
     alias t='python ~/bin/t/t.py --task-dir ~/tasks --list tasks'
     #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
 fi

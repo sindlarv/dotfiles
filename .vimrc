@@ -105,6 +105,8 @@ set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %=%-16(\ %l,%c-%v\ %)%P
 "set foldmethod=syntax
 "set foldcolumn=4
 "set nofoldenable
+" make sure there's no additional column at the beginning of the screen
+set foldcolumn=0
 
 " turn on syntax highlighting
 syntax on

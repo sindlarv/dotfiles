@@ -12,6 +12,9 @@ endif
 " color scheme
 if has('gui_running')
     set background=light
+"   set initial window size
+    set columns=120
+    set lines=40
 else
     set background=dark
 endif

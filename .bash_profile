@@ -41,7 +41,7 @@ fi
 KEYCHAIN=
 [ -x /usr/bin/keychain ] && KEYCHAIN=/usr/bin/keychain
 [ -x ~/bin/keychain ] && KEYCHAIN=~/bin/keychain
-KEYCHAIN_ARGS="--nogui"
+KEYCHAIN_ARGS="--nogui --agents ssh"
 
 HOSTNAME=`hostname`
 
@@ -61,6 +61,8 @@ if [ -n $KEYCHAIN ] ; then
 
         echo "Keychain: SSH_AGENT_PID is set, so running keychain to load keys."
         $KEYCHAIN $KEYCHAIN_ARGS $CERTFILES && source ~/.keychain/$HOSTNAME-sh
+        # alternative; somewhat easier if both ssh and gpg agents are required
+        #eval $($KEYCHAIN --eval $KEYCHAIN_ARGS $CERTFILES)
 
 # Else no ssh-agent configured
     else
@@ -100,15 +102,15 @@ less_options=(
 
 # Do not complain when we are on a dumb terminal.
     --dumb
-);
-export LESS="${less_options[*]}";
-unset less_options;
-export PAGER='less';
+)
+export LESS="${less_options[*]}"
+unset less_options
+export PAGER='less'
 
 # Make "less" transparently unpack archives etc.
 if [ -x /usr/bin/lesspipe ]; then
-    eval $(/usr/bin/lesspipe);
-fi;
+    eval $(/usr/bin/lesspipe)
+fi
 
 # add hostname completion to sl
 if [ -x ~/bin/sl ]; then

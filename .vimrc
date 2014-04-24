@@ -12,6 +12,9 @@ endif
 " color scheme
 if has('gui_running')
     set background=light
+"   set initial window size
+    set columns=120
+    set lines=40
 else
     set background=dark
 endif
@@ -102,6 +105,8 @@ set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %=%-16(\ %l,%c-%v\ %)%P
 "set foldmethod=syntax
 "set foldcolumn=4
 "set nofoldenable
+" make sure there's no additional column at the beginning of the screen
+set foldcolumn=0
 
 " turn on syntax highlighting
 syntax on
@@ -109,8 +114,8 @@ syntax on
 filetype plugin indent on
 
 " save view; needed for code-folding, for example
-autocmd BufWinLeave .* mkview
-autocmd BufWinEnter .* silent loadview
+"autocmd BufWinLeave .* mkview
+"autocmd BufWinEnter .* silent loadview
 
 " plugin:AutoFenc configuration options
 "g:autofenc_emit_messages

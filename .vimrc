@@ -50,7 +50,7 @@ set smartcase
 " considered at all)
 " The following requires VIm 7.3.x
 " wildignorecase is an option, not feature; use exists() instead
-if exists('wildignorecase')
+if exists('+wildignorecase')
     set wildignorecase
 endif
 

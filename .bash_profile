@@ -110,3 +110,7 @@ if [ -x /usr/bin/lesspipe ]; then
     eval $(/usr/bin/lesspipe);
 fi;
 
+# add hostname completion to sl
+if [ -x ~/bin/sl ]; then
+    complete -F _known_hosts sl
+fi

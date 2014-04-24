@@ -114,8 +114,8 @@ syntax on
 filetype plugin indent on
 
 " save view; needed for code-folding, for example
-autocmd BufWinLeave .* mkview
-autocmd BufWinEnter .* silent loadview
+"autocmd BufWinLeave .* mkview
+"autocmd BufWinEnter .* silent loadview
 
 " plugin:AutoFenc configuration options
 "g:autofenc_emit_messages

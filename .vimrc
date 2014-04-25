@@ -148,3 +148,8 @@ let c_space_errors=1
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
+" When splitting vertically put the new window right of the current one.
+if has('vertsplit')
+    set splitright
+    set splitbelow
+endif

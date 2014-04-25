@@ -12,7 +12,7 @@
 	di = diff
 	dc = diff --cached
 	dv = difftool --tool=vimdiff --no-prompt
-	ci = commit
+	ci = commit --verbose
 	br = branch
 	co = checkout
 	ps = push

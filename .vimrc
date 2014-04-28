@@ -148,6 +148,12 @@ let c_space_errors=1
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
+" when splitting vertically put the new window right of the current one.
+if has('vertsplit')
+    set splitright
+    set splitbelow
+endif
+
 " http://vim.wikia.com/wiki/Accessing_the_system_clipboard
 " synchronize the * register with system clipboard
 " notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option

@@ -148,3 +148,9 @@ let c_space_errors=1
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
+" http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+" synchronize the * register with system clipboard
+" notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option
+set clipboard=unnamed
+" notes: if needed, for vim 7.3.74+ you can also sync the + register, too
+"set clipboard=unnamedplus

@@ -57,6 +57,10 @@ alias ...='cd ../..'
 alias .,='cd $OLDPWD'
 
 # vim related
+# for RHEL
+if [ -e /usr/bin/vimx ]; then
+    alias vim='/usr/bin/vimx'
+fi
 alias :q='exit'
 # alias :m='pushd'      # store a path
 # alias :d='popd'       # pop a path

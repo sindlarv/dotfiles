@@ -55,7 +55,7 @@ if exists('+wildignorecase')
 endif
 
 " complete files like a shell
-set wildmode=list:longest
+set wildmode=longest,list
 
 " directory containing swap files
 set dir=~/.cache,.
@@ -148,8 +148,15 @@ let c_space_errors=1
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
-" When splitting vertically put the new window right of the current one.
+" when splitting vertically put the new window right of the current one.
 if has('vertsplit')
     set splitright
     set splitbelow
 endif
+
+" http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+" synchronize the * register with system clipboard
+" notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option
+set clipboard=unnamed
+" notes: if needed, for vim 7.3.74+ you can also sync the + register, too
+"set clipboard=unnamedplus

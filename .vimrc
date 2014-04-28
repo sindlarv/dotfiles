@@ -55,7 +55,7 @@ if exists('+wildignorecase')
 endif
 
 " complete files like a shell
-set wildmode=list:longest
+set wildmode=longest,list
 
 " directory containing swap files
 set dir=~/.cache,.

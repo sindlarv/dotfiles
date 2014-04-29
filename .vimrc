@@ -11,13 +11,28 @@ endif
 
 " color scheme
 if has('gui_running')
-    set background=light
-"   set initial window size
-    set columns=120
+    set background=dark
+    " set initial window size
+    set columns=140
     set lines=40
+
+    " http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+    " synchronize the * register with system clipboard
+    set clipboard=unnamed
+    " notes: if needed, for vim 7.3.74+ you can also sync the + register, too
+    "set clipboard=unnamedplus
 else
     set background=dark
 endif
+
+"colorscheme solarized
+colorscheme jellybeans
+"colorscheme badwolf
+
+" solarized options
+let g:solarized_contrast='high'
+let g:solarized_visibility='high'
+"let g:solarized_termtrans=1
 
 " vimdiff colors
 if &diff
@@ -28,15 +43,6 @@ if &diff
 "    highlight DiffChange cterm=none ctermfg=bg ctermbg=Yellow gui=none guifg=bg guibg=Yellow
 "    highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta
 endif
-
-" solarized options
-let g:solarized_contrast='high'
-let g:solarized_visibility='high'
-"let g:solarized_termtrans=1
-
-"colorscheme solarized
-colorscheme jellybeans
-"colorscheme badwolf
 
 " encoding
 set encoding=utf-8
@@ -153,10 +159,3 @@ if has('vertsplit')
     set splitright
     set splitbelow
 endif
-
-" http://vim.wikia.com/wiki/Accessing_the_system_clipboard
-" synchronize the * register with system clipboard
-" notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option
-set clipboard=unnamed
-" notes: if needed, for vim 7.3.74+ you can also sync the + register, too
-"set clipboard=unnamedplus

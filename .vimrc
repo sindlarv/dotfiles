@@ -166,3 +166,21 @@ if has('vertsplit')
     set splitright
     set splitbelow
 endif
+
+" set mapleader (<leader>) so that it can easily be hit by either hand,
+" the default ("\") is not very convenient
+let mapleader = ","
+" as there's no visual feedback <leader> has been pressed, lets tell vim to
+" signal it
+set showcmd
+
+if &term =~ '256color'
+    " disable Background Color Erase (BCE) so that color schemes
+    " render properly when inside 256-color tmux and GNU screen.
+    " http://sunaku.github.io/vim-256color-bce.html
+    set t_ut=
+endif
+
+" set the sign and line columns to black
+highlight LineNr ctermbg=black guibg=black
+highlight SignColumn ctermbg=black guibg=black

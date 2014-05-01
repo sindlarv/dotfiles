@@ -18,6 +18,7 @@ if has('gui_running')
 
     " http://vim.wikia.com/wiki/Accessing_the_system_clipboard
     " synchronize the * register with system clipboard
+    " notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option
     set clipboard=unnamed
     " notes: if needed, for vim 7.3.74+ you can also sync the + register, too
     "set clipboard=unnamedplus
@@ -76,11 +77,21 @@ set expandtab
 " show line at 80 chars, requires VIm 7.3+
 "if v:version >= 730
 if exists('+colorcolumn')
-    " show just line
-    set colorcolumn=+1
-    highlight ColorColumn ctermbg=235 guibg=#2c2d27
-    let &colorcolumn="80,".join(range(120,999),",")
+    "set colorcolumn=80
+    " or you can base the value of 'colorcolumn' on 'textwidth'
+    "set colorcolumn=+1
+    "highlight ColorColumn ctermbg=235 guibg=#2c2d27
+    let &colorcolumn=join(range(81,999),",")
+    "we can also have two color zones (warning|danger?)
+    "let &colorcolumn="81,".join(range(121,999),",")
+else
+    autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
+
+" characters at 80+ column
+map <F12> :/\%>80v./+<CR>
+"command W /\%>80v./+<CR>
+"command W match ErrorMsg '\%>80v.\+'
 
 " enable line numbering and highlighting the current one
 set number
@@ -138,10 +149,6 @@ nnoremap <cr> :noh<cr>
 command L set list!
 "  use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
-
-" characters at 80+ column
-map <F12> :/\%>80v./+<CR>
-"command W /\%>80v./+<CR>
 
 " reverse meaning of the Paste/New line keys
 nnoremap o O

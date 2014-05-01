@@ -20,8 +20,16 @@ if has('gui_running')
     " synchronize the * register with system clipboard
     " notes: for console version of vim, it has to be compiled with "+xterm_clipboard" option
     set clipboard=unnamed
-    " notes: if needed, for vim 7.3.74+ you can also sync the + register, too
-    "set clipboard=unnamedplus
+    " since vim 7.3.74+ you can also sync the + register
+    if has('unnamedplus')
+        set clipboard=unnamedplus
+    else
+        "in case older version of vim is available, set the following
+        vnoremap y "+y
+        nnoremap yy V"+yy
+        nnoremap p "+gp
+    endif
+
 else
     set background=dark
 endif

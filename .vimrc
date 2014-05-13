@@ -29,7 +29,6 @@ if has('gui_running')
         nnoremap yy V"+yy
         nnoremap p "+gp
     endif
-
 else
     set background=dark
 endif

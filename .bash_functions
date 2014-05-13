@@ -270,3 +270,9 @@ function __prompt_command() {
 }
 # }}}
 
+# Simple watch within tmux
+function tm.w() {
+    tmux split-window -d "$*"
+}
+# }}}
+

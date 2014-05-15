@@ -206,8 +206,11 @@ function f.unarc() {
 # simple calculator {{{
 function g.calc() {
     local result=""
-    result="$(printf "scale=3;$*\n" | bc --mathlib | tr -d '\\\n')"
-    #                       └─ default (when `--mathlib` is used) is 20
+    local myscale=3
+    #result="$(printf "scale=3;$*\n" | bc --mathlib | tr -d '\\\n')"
+    #                        └─ default (when `--mathlib` is used) is 20
+    # http://stempell.com/2009/08/rechnen-in-bash/
+    result="$(printf "scale=${myscale};(((10^${myscale})*$*)+0.5)/(10^${myscale})\n" | bc --mathlib | tr -d '\\\n')"
 
     if [[ "$result" == *.* ]]; then
         # improve the output for decimal numbers

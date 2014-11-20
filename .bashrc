@@ -146,6 +146,10 @@ export LC_MEASUREMENT="cs_CZ.utf8"
 # editor
 export EDITOR="vim"
 
+# fix for > Dropbox 2.7.x indicator problems
+# https://bugs.launchpad.net/elementaryos/+bug/1357938/comments/10
+export DROPBOX_USE_LIBAPPINDICATOR=1
+
 # keychain
 if [ -f ~/.keychain/${HOSTNAME}-sh ]; then
     source ~/.keychain/${HOSTNAME}-sh

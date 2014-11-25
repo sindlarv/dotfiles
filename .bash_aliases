@@ -81,6 +81,7 @@ fi
 if [ -e /usr/bin/apt-get ]; then
     alias apti='sudo apt-get install'
     alias aptr='sudo apt-get remove'
+    alias aptR='sudo apt-get purge'
     alias apta='sudo apt-get autoremove'
     alias aptp='sudo apt-get purge'
     alias aptu='sudo apt-get update'

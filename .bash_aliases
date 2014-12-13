@@ -72,8 +72,8 @@ if [ -e /usr/bin/yum ]; then
     alias yums='yum search'
     alias yumS='yum info'
     alias yumd='yum deplist'
-    alias yumf='yum provides'
-    alias yumq='repoquery -l --installed'
+    alias yumq='yum provides'
+    alias yumf='repoquery -l --installed'
     alias yumh='sudo yum history'
 fi
 

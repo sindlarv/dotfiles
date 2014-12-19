@@ -8,7 +8,7 @@ if [ "${BBOX}" == 0 ]; then
     ARGLSDIR="--group-directories-first"
     ARGLSTIM="--time-style=long-iso"
     ARGCPUPD="-u"
-    ARGDFFSI="-T"
+    ARGDFFSI="-T -x fuse.gvfs-fuse-daemon"
 fi
 
 # enable color support of ls and also add handy aliases
@@ -72,8 +72,8 @@ if [ -e /usr/bin/yum ]; then
     alias yums='yum search'
     alias yumS='yum info'
     alias yumd='yum deplist'
-    alias yumf='yum provides'
-    alias yumq='repoquery -l --installed'
+    alias yumq='yum provides'
+    alias yumf='repoquery -l --installed'
     alias yumh='sudo yum history'
 fi
 
@@ -109,4 +109,9 @@ if [ -e ~/bin/t/t.py ]; then
     alias t='python ~/bin/t/t.py --task-dir ~/tasks --list tasks'
     #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
 fi
+
+# mutt related
+# fixed the problem with mutt not redrawing screen
+# http://objectmix.com/mutt/202183-mutt-refresh-update-screen.html
+alias m="TERM=xterm-color mutt"
 

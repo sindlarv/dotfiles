@@ -129,7 +129,7 @@ fi
 /bin/stty -ixon
 
 # user locale
-#export LANG=
+#export LANG="en_GB.utf8"
 export LC_CTYPE="cs_CZ.utf8"
 export LC_NUMERIC="cs_CZ.utf8"
 export LC_TIME="cs_CZ.utf8"
@@ -141,7 +141,7 @@ export LC_NAME="cs_CZ.utf8"
 export LC_ADDRESS="cs_CZ.utf8"
 export LC_TELEPHONE="cs_CZ.utf8"
 export LC_MEASUREMENT="cs_CZ.utf8"
-#export LC_IDENTIFICATION=
+#export LC_IDENTIFICATION="en_GB.utf8"
 
 # editor
 export EDITOR="vim"
@@ -151,3 +151,15 @@ if [ -f ~/.keychain/${HOSTNAME}-sh ]; then
     source ~/.keychain/${HOSTNAME}-sh
 fi
 
+# logging terminal session
+#if [ -z "$UNDER_SCRIPT" ]; then
+#    logdir=$HOME/terminal-logs
+#    if [ ! -d $logdir ]; then
+#        mkdir $logdir
+#    fi
+#    gzip -q $logdir/*.log
+#    logfile=$logdir/$(date '+%Y-%m-%d_%T').$$.log
+#    export UNDER_SCRIPT=$logfile
+#    script -f -q $logfile
+#    exit
+#fi

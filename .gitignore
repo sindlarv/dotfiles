@@ -7,6 +7,7 @@ Session.vim
 *~
 .vim/bundle/*
 .vim/view/*
+.vim/doc/*
 # other
 *.gpg
 random_seed

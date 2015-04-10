@@ -2,21 +2,21 @@
 
 # naive check for busybox machines
 BBOX=$(ls --help 2>&1 | grep BusyBox | wc -l)
-ARGLSDIR=""
-ARGLSTIM=""
 if [ "${BBOX}" == 0 ]; then
     ARGLSDIR="--group-directories-first"
     ARGLSTIM="--time-style=long-iso"
     ARGCPUPD="-u"
     ARGDFFSI="-T -x fuse.gvfs-fuse-daemon"
+else
+    ARGLSDIR=""
+    ARGLSTIM=""
 fi
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if [ $(which dircolors) ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls="ls --color=auto ${ARGLSTIM}"
     alias dir='dir --color=auto'
-    alias vdir="vdir --color=auto ${ARGLSTIM}"
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -24,17 +24,18 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Add an "alert" alias for long running commands. Use like so:
-#sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+if [ $(which notify-send) ]; then
+    #sleep 10; alert
+    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+fi
 
 # ls
-alias l="ls -lh ${ARGLSDIR}"    # list items in columns with indicators
-alias ll="ls -lah ${ARGLSDIR}"  # long listing format and si units
-alias la="ls -a ${ARGLSDIR}"    # list all
-alias l.="ls -d .* ${ARGLSDIR}" # list configuration related files/folders
-alias lr="ls -R ${ARGLSDIR}"    # recursive
-alias lc='ls -CF'               # list items in columns with indicators
-alias lx='ls -lX'               # sort by extension
+alias l="ls -lh ${ARGLSDIR}"    # long listing format and si units
+alias ll="ls -lah ${ARGLSDIR}"  # long listing format including config files
+alias la="ls -a ${ARGLSDIR}"    # list everything
+alias l.="ls -d .* ${ARGLSDIR}" # list just configuration related files/folders
+alias lr="ls -R ${ARGLSDIR}"    # recursive listing
+alias lX='ls -lX'               # sort by extension
 alias lS='ls -lS'               # sort by size
 alias lt='ls -lt'               # sort by mod time, reverse order
 
@@ -58,7 +59,7 @@ alias .,='cd $OLDPWD'
 
 # vim related
 # for RHEL
-if [ -e /usr/bin/vimx ]; then
+if [ $(which vimx) ]; then
     alias vim='/usr/bin/vimx'
 fi
 alias :q='exit'
@@ -66,7 +67,7 @@ alias :q='exit'
 # alias :d='popd'       # pop a path
 
 # yum related
-if [ -e /usr/bin/yum ]; then
+if [ $(which yum) ]; then
     alias yumi='sudo yum install'
     alias yumr='sudo yum remove'
     alias yums='yum search'
@@ -78,7 +79,7 @@ if [ -e /usr/bin/yum ]; then
 fi
 
 # apt related
-if [ -e /usr/bin/apt-get ]; then
+if [ $(which apt-get) ]; then
     alias apti='sudo apt-get install'
     alias aptr='sudo apt-get remove'
     alias aptR='sudo apt-get purge'
@@ -88,21 +89,13 @@ if [ -e /usr/bin/apt-get ]; then
     alias aptU='sudo apt-get upgrade'
     alias apts='apt-cache search'
     alias aptS='apt-cache show'
-    alias aptf='dpkg-query -S'
+    alias aptf='dpkg -L'
+    alias aptq='dpkg-query -S'
 fi
-
-# Add an "alert" alias for long running commands.  Use like so:
-# #   sleep 10; alert
-# alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-#
-
-# tmux related
-#alias tmux='tmux -S ~/.cache/tmux'
 
 # AIX command completion help
 # https://www.ibm.com/developerworks/community/blogs/brian/entry/finding_command_names_on_aix_using_the_korn_shell?lang=en
 #alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
-#alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq | grep -i $1'
 
 # 't' - todo list manager
 # https://bitbucket.org/sjl/t/src
@@ -114,5 +107,7 @@ fi
 # mutt related
 # fixed the problem with mutt not redrawing screen
 # http://objectmix.com/mutt/202183-mutt-refresh-update-screen.html
-alias m="TERM=xterm-color mutt"
+if [ $(which mutt) ]; then
+    alias m="TERM=xterm-color mutt"
+fi
 

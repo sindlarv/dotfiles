@@ -101,7 +101,7 @@ map <F12> :/\%>80v./+<CR>
 "command W match ErrorMsg '\%>80v.\+'
 
 " enable line numbering and highlighting the current one
-set number
+"set number
 set cursorline
 
 " turn on line wrapping and show 3 lines of context around the cursor
@@ -158,10 +158,10 @@ command L set list!
 set listchars=tab:▸\ ,eol:¬
 
 " reverse meaning of the Paste/New line keys
-nnoremap o O
-nnoremap O o
-nnoremap p P
-nnoremap P p
+"nnoremap o O
+"nnoremap O o
+"nnoremap p P
+"nnoremap P p
 
 " highlight redundant spaces and tabs
 let c_space_errors=1

@@ -79,7 +79,7 @@ if [ $(which yum) ]; then
 fi
 
 # apt related
-if [ $(which apt-get) ]; then
+if [ $(which apt-get 2> /dev/null) ]; then
     alias apti='sudo apt-get install'
     alias aptr='sudo apt-get remove'
     alias aptR='sudo apt-get purge'

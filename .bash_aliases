@@ -111,3 +111,7 @@ if [ $(which mutt) ]; then
     alias m="TERM=xterm-color mutt"
 fi
 
+# Include custom aliases
+if [ -f ~/.aliases.local ]; then
+    source ~/.aliases.local
+fi

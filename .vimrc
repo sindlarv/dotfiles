@@ -6,7 +6,7 @@
 
 " enable 256 color mode if terminal supports it
 if $TERM == "xterm-256color"
-  set t_Co=256
+    set t_Co=256
 endif
 
 " color scheme

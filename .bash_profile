@@ -116,3 +116,16 @@ fi
 if [ -x ~/bin/sl ]; then
     complete -F _known_hosts sl
 fi
+
+# add texlive to the environment
+if [ -d /usr/local/texlive/2014/bin/x86_64-linux ]; then
+    PATH=/usr/local/texlive/2014/bin/x86_64-linux:$PATH; export PATH
+    MANPATH=/usr/local/texlive/2014/texmf-dist/doc/man:$MANPATH; export MANPATH
+    INFOPATH=/usr/local/texlive/2014/texmf-dist/doc/info:$INFOPATH; export INFOPATH
+fi
+
+# fix unnecesary glibc related stat() syscalls
+# http://stackoverflow.com/questions/4554271/how-to-avoid-excessive-stat-etc-localtime-calls-in-strftime-on-linux
+#TZ=":/etc/localtime"; export TZ
+TZ="Europe/Prague"; export TZ
+

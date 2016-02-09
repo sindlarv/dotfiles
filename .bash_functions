@@ -205,23 +205,8 @@ function f.unarc() {
 
 # simple calculator {{{
 function g.calc() {
-    local result=""
-    local myscale=3
-    #result="$(printf "scale=3;$*\n" | bc --mathlib | tr -d '\\\n')"
-    #                        └─ default (when `--mathlib` is used) is 20
-    # http://stempell.com/2009/08/rechnen-in-bash/
-    result="$(printf "scale=${myscale};(((10^${myscale})*$*)+0.5)/(10^${myscale})\n" | bc --mathlib | tr -d '\\\n')"
-
-    if [[ "$result" == *.* ]]; then
-        # improve the output for decimal numbers
-        printf "$result" |
-        sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
-            -e 's/^-\./-0./' `# add "0" for cases like "-.5"`\
-            -e 's/0*$//;s/\.$//' # remove trailing zeros
-    else
-        printf "$result"
-    fi
-    printf "\n"
+    printf "$*\n" | bc --mathlib
+    # optionally (( results = $1 )); echo $results (requires quoting, though)
 }
 # }}}
 
@@ -270,6 +255,9 @@ function __prompt_command() {
     # fix for exit status upon Ctrl-Z
     # http://unix.stackexchange.com/questions/62173/exit-status-of-148-upon-ctrlz
     if [ $EXIT -eq 0 -o $(kill -l $?) = TSTP ]; then PS1+="${GREEN}\$${NC} "; else PS1+="${BRED}\$${NC} "; fi
+
+    # signalize logging
+    if [ "$(ps -o comm= -p $PPID)" = "script" ]; then PS1+="(${ALERT}*${NC}) "; fi
 }
 # }}}
 

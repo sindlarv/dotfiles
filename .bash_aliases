@@ -93,10 +93,6 @@ if [ $(which apt-get 2> /dev/null) ]; then
     alias aptq='dpkg-query -S'
 fi
 
-# AIX command completion help
-# https://www.ibm.com/developerworks/community/blogs/brian/entry/finding_command_names_on_aix_using_the_korn_shell?lang=en
-#alias lscmd='for dir in `echo $PATH | tr ":" " "`; do for file in `ls -1 "$dir"`; do [ -x "$dir/$file" ] && echo $file; done; done | sort | uniq'
-
 # 't' - todo list manager
 # https://bitbucket.org/sjl/t/src
 if [ -e ~/bin/t/t.py ]; then
@@ -110,7 +106,4 @@ fi
 if [ $(which mutt) ]; then
     alias m="TERM=xterm-color mutt"
 fi
-
-# work
-alias ch='function _ch(){ mkdir -p $HOME/Documents/_work/$1; cd $HOME/Documents/_work/$1; };_ch'
 

@@ -1,6 +1,6 @@
 # vim: set filetype=sh:
 
-# naive check for busybox machines
+# Check (naively) for busybox machines
 BBOX=$(ls --help 2>&1 | grep BusyBox | wc -l)
 if [ "${BBOX}" == 0 ]; then
     ARGLSDIR="--group-directories-first"
@@ -12,7 +12,7 @@ else
     ARGLSTIM=""
 fi
 
-# enable color support of ls and also add handy aliases
+# Enable color support of ls and also add handy aliases
 if [ $(which dircolors) ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls="ls --color=auto ${ARGLSTIM}"
@@ -30,8 +30,8 @@ if [ $(which notify-send) ]; then
 fi
 
 # ls
-alias l="ls -lh ${ARGLSDIR}"    # long listing format and si units
-alias ll="ls -lah ${ARGLSDIR}"  # long listing format including config files
+alias l="ls -l ${ARGLSDIR}"    # long listing format and si units
+alias ll="ls -la ${ARGLSDIR}"  # long listing format including config files
 alias la="ls -a ${ARGLSDIR}"    # list everything
 alias l.="ls -d .* ${ARGLSDIR}" # list just configuration related files/folders
 alias lr="ls -R ${ARGLSDIR}"    # recursive listing
@@ -39,7 +39,7 @@ alias lX='ls -lX'               # sort by extension
 alias lS='ls -lS'               # sort by size
 alias lt='ls -lt'               # sort by mod time, reverse order
 
-# df and du
+# df, du
 alias du='du -h'                # human readable units
 alias df="df -kh ${ARGDFFSI}"   # human readable units
 
@@ -57,7 +57,7 @@ alias ..='cd ..'        # up
 alias ...='cd ../..'
 alias .,='cd $OLDPWD'
 
-# vim related
+# vim
 # for RHEL
 if [ $(which vimx) ]; then
     alias vim='/usr/bin/vimx'
@@ -66,7 +66,7 @@ alias :q='exit'
 # alias :m='pushd'      # store a path
 # alias :d='popd'       # pop a path
 
-# yum related
+# yum
 if [ $(which yum) ]; then
     alias yumi='sudo yum install'
     alias yumr='sudo yum remove'
@@ -78,7 +78,7 @@ if [ $(which yum) ]; then
     alias yumh='sudo yum history'
 fi
 
-# apt related
+# apt
 if [ $(which apt-get 2> /dev/null) ]; then
     alias apti='sudo apt-get install'
     alias aptr='sudo apt-get remove'
@@ -104,14 +104,13 @@ if [ -e ~/bin/t/t.py ]; then
     #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
 fi
 
-# mutt related
+# mutt
 # fixed the problem with mutt not redrawing screen
 # http://objectmix.com/mutt/202183-mutt-refresh-update-screen.html
 if [ $(which mutt) ]; then
     alias m="TERM=xterm-color mutt"
 fi
 
-# Include custom aliases
-if [ -f ~/.aliases.local ]; then
-    source ~/.aliases.local
-fi
+# work
+alias ch='function _ch(){ mkdir -p $HOME/Documents/_work/$1; cd $HOME/Documents/_work/$1; };_ch'
+

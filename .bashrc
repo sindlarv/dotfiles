@@ -48,6 +48,10 @@ TZ="Europe/Prague"; export TZ
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+# And local ones, too
+if [ -f ~/.bash_aliases_local ]; then
+    . ~/.bash_aliases_local
+fi
 
 # Include functions from a separate file
 if [ -f ~/.bash_functions ]; then

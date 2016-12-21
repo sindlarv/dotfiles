@@ -261,9 +261,15 @@ function __prompt_command() {
 }
 # }}}
 
-# Simple watch within tmux
+# Simple watch within tmux {{{
 function tm.w() {
     tmux split-window -d "$*"
 }
 # }}}
 
+# To make cd work from within a script {{{
+# http://stackoverflow.com/a/7020787
+function c.dir() {
+    cd ${1}
+}
+# }}}

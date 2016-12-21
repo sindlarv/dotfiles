@@ -1,57 +1,35 @@
-# ~/.profile: executed by the command interpreter for login shells.
-# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-# exists.
-# see /usr/share/doc/bash/examples/startup-files for examples.
-# the files are located in the bash-doc package.
+# Note: ~/.profile is executed by the command interpreter for login shells.
+# This file however might, or might NOT be read by bash, if ~/.bash_profile or
+# ~/.bash_login exists. This behavior is not consistent across all distributions
+# and platforms.
 
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
 
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
+# Customize your shell with fancy prompt, aliases, functions etc.
+# http://askubuntu.com/a/438170
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
 fi
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
 
-export EDITOR="vim"
+# Set up Keychain
+# Note: Various distributions may have their own scripts, for example in
+# /etc/profile[.d], or someplace else. But given that one can never really be
+# sure what gets run when logging in graphically, lets check and initialize
+# Keychain, if needed.
 
-# Set terminal based on number of colors detected
-if [ `tput colors` -eq 256 ]; then
-    export TERM='xterm-256color'
-elif [ `tput colors` -gt 80 ]; then
-    export TERM='xterm-88color'
-else
-    export TERM='xterm'
-fi
-
-#---------------------
-# SSH Keychain
-#----------------------
-# https://spaces.seas.harvard.edu/display/USERDOCS/Storing+Your+Keys+-+SSH-Agent,+Agent+Forwarding,+and+Keychain
-
-# find the keychain script
+# Find the keychain script
 KEYCHAIN=
 [ -x /usr/bin/keychain ] && KEYCHAIN=/usr/bin/keychain
 [ -x ~/bin/keychain ] && KEYCHAIN=~/bin/keychain
 KEYCHAIN_ARGS="--nogui --agents ssh"
 
-HOSTNAME=`hostname`
-
-# keys to use
+# Keys to use
 SSHDIR="$HOME/.ssh"
 i=0; for files in ${SSHDIR}/*.pub; do certs[$i]=$(basename ${files%%\.pub}); i=$(expr $i + 1); done
-#echo ${certs[*]}
 CERTFILES=${certs[*]}
 
-if [ -n $KEYCHAIN ] ; then
+# Check if this is an interactive session, or not
+if [[ $- == *i* ]] && [[ -n $KEYCHAIN ]]; then
 
 # If there's already a ssh-agent running, then we know we're on a desktop or
 # laptop (i.e. a client), so we should run keychain so that we can set up our
@@ -80,52 +58,4 @@ if [ -n $KEYCHAIN ] ; then
 fi
 
 unset CERTFILES KEYCHAIN
-
-
-# Make less the default pager, and specify some useful defaults.
-less_options=(
-# If the entire text fits on one screen, just show it and quit. (Be morei like
-# "cat" and less like "more".)
-    --quit-if-one-screen
-
-# Do not clear the screen first.
-    --no-init
-
-# Like "smartcase" in Vim: ignore case unless the search pattern is mixed.
-    --ignore-case
-
-# Do not automatically wrap long lines.
-    --chop-long-lines
-
-# Allow ANSI colour escapes, but no other escapes.
-    --RAW-CONTROL-CHARS
-
-# Do not complain when we are on a dumb terminal.
-    --dumb
-)
-export LESS="${less_options[*]}"
-unset less_options
-export PAGER='less'
-
-# Make "less" transparently unpack archives etc.
-if [ -x /usr/bin/lesspipe ]; then
-    eval $(/usr/bin/lesspipe)
-fi
-
-# add hostname completion to sl
-if [ -x ~/bin/sl ]; then
-    complete -F _known_hosts sl
-fi
-
-# add texlive to the environment
-if [ -d /usr/local/texlive/2014/bin/x86_64-linux ]; then
-    PATH=/usr/local/texlive/2014/bin/x86_64-linux:$PATH; export PATH
-    MANPATH=/usr/local/texlive/2014/texmf-dist/doc/man:$MANPATH; export MANPATH
-    INFOPATH=/usr/local/texlive/2014/texmf-dist/doc/info:$INFOPATH; export INFOPATH
-fi
-
-# fix unnecesary glibc related stat() syscalls
-# http://stackoverflow.com/questions/4554271/how-to-avoid-excessive-stat-etc-localtime-calls-in-strftime-on-linux
-#TZ=":/etc/localtime"; export TZ
-TZ="Europe/Prague"; export TZ
 

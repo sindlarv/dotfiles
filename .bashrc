@@ -1,29 +1,27 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# vim: set filetype=sh:
 
+# https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29#Startup_scripts
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
 
 # Don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
 export HISTCONTROL=ignoreboth
 # Don't store the following commands in history
 export HISTIGNORE="&:bg:fg:h"
 # Append to the history file, don't overwrite it
 shopt -s histappend
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# For setting history length see HISTSIZE and HISTFILESIZE
 export HISTSIZE=1000
 export HISTFILESIZE=2000
-# add date/time information
+# Add date/time information to history
 export HISTTIMEFORMAT="[%F %T]  "
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# Check the window size after each command and, if necessary, update the values
+# of LINES and COLUMNS.
 shopt -s checkwinsize
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
+# If set, the pattern "**" used in a pathname expansion context will match all
+# files and zero or more directories and subdirectories.
 #shopt -s globstar
 
 
@@ -39,7 +37,7 @@ export EDITOR="vim"
 
 
 # Fix unnecesary glibc related stat() syscalls
-# http://stackoverflow.com/questions/4554271/how-to-avoid-excessive-stat-etc-localtime-calls-in-strftime-on-linux
+# http://stackoverflow.com/q/4554271
 #TZ=":/etc/localtime"; export TZ
 TZ="Europe/Prague"; export TZ
 
@@ -58,16 +56,13 @@ if [ -f ~/.bash_functions ]; then
   . ~/.bash_functions;
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Enable programmable completion features (you don't need to enable this,
+# if it's already enabled in /etc/bash.bashrc and /etc/profile sources
+# /etc/bash.bashrc).
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-
-# Color Reset definition
-NC="\001\e[0m\002"
 
 # Set terminal based on number of colors detected
 if [ "$(tput colors)c" == "256c" ]; then
@@ -76,59 +71,57 @@ else
     export TERM='xterm'
 fi
 
-# Color and symbol definitions
-case "$TERM" in
-    xterm-256color)
-        # Color definitions (taken from Color Bash Prompt HowTo).
-        # Some colors might look different of some terminals.
-        # Normal Colors
-        BLACK="\001\e[0;30m\002";
-        RED="\001\e[0;31m\002";
-        GREEN="\001\e[0;32m\002";
-        YELLOW="\001\e[0;33m\002";
-        BLUE="\001\e[0;34m\002";
-        PURPLE="\001\e[0;35m\002";
-        CYAN="\001\e[0;36m\002";
-        WHITE="\001\e[0;37m\002";
-        # Bold
-        BBLACK="\001\e[1;30m\002";
-        BRED="\001\e[1;31m\002";
-        BGREEN="\001\e[1;32m\002";
-        BYELLOW="\001\e[1;33m\002";
-        BBLUE="\001\e[1;34m\002";
-        BPURPLE="\001\e[1;35m\002";
-        BCYAN="\001\e[1;36m\002";
-        BWHITE="\001\e[1;37m\002";
-        # Background
-        ON_BLACK="\001\e[40m\002";
-        ON_RED="\001\e[41m\002";
-        ON_GREEN="\001\e[42m\002";
-        ON_YELLOW="\001\e[43m\002";
-        ON_BLUE="\001\e[44m\002";
-        ON_PURPLE="\001\e[45m\002";
-        ON_CYAN="\001\e[46m\002";
-        ON_WHITE="\001\e[47m\002";
-        # Other ([✘] / \342\234\227, [✔] / \342\234\223)
-        FANCYX="\342\234\227";
-        CHECKMARK="\342\234\223";
-        ALERT=${BWHITE}${ON_RED};
-        # Color date/time information in history command output
-        export HISTTIMEFORMAT="$(echo -e ${CYAN})[%F %T]$(echo -e ${NC})  ";;
-esac
-
 
 # Check for color support
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
+    # We have color support; assume it's compliant with Ecma-48 (ISO/IEC-6429).
+    # (Lack of such support is extremely rare, and such a case would tend
+    # to support setf rather than setaf.)
     color_prompt=yes
 else
     color_prompt=
 fi
 
-# Please note that __prompt_command function uses color names defined earlier
 if [ "$color_prompt" = yes ]; then
+    # Source: http://ascii-table.com/ansi-escape-sequences.php
+    # Note: Non-printable sequences should be enclosed in \[ and \] (http://unix.stackexchange.com/a/105974)
+    # All attributes off
+    NC="\[\033[0m\]"
+    # Foreground colors
+    BLACK="\[\033[0;30m\]"
+    RED="\[\033[0;31m\]"
+    GREEN="\[\033[0;32m\]"
+    YELLOW="\[\033[0;33m\]"
+    BLUE="\[\033[0;34m\]"
+    PURPLE="\[\033[0;35m\]"
+    CYAN="\[\033[0;36m\]"
+    WHITE="\[\033[0;37m\]"
+    # Bold style
+    BBLACK="\[\033[1;30m\]"
+    BRED="\[\033[1;31m\]"
+    BGREEN="\[\033[1;32m\]"
+    BYELLOW="\[\033[1;33m\]"
+    BBLUE="\[\033[1;34m\]"
+    BPURPLE="\[\033[1;35m\]"
+    BCYAN="\[\033[1;36m\]"
+    BWHITE="\[\033[1;37m\]"
+    # Background colors
+    ON_BLACK="\[\033[40m\]"
+    ON_RED="\[\033[41m\]"
+    ON_GREEN="\[\033[42m\]"
+    ON_YELLOW="\[\033[43m\]"
+    ON_BLUE="\[\033[44m\]"
+    ON_PURPLE="\[\033[45m\]"
+    ON_CYAN="\[\033[46m\]"
+    ON_WHITE="\[\033[47m\]"
+    # Combinations
+    ALERT=${BWHITE}${ON_RED}
+    # Symbols
+    FANCYX="\342\234\227" # [✘]
+    CHECKMARK="\342\234\223" # [✔]
+    # Other
+    export HISTTIMEFORMAT="$(echo -e ${CYAN}[%F %T]${NC})  "
+    # Note: The following function uses the color names, as defined above
     PROMPT_COMMAND=__prompt_command
 else
     PS1='\u@\h:\w\$ '

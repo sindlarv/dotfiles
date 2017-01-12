@@ -1,8 +1,4 @@
-# Note: ~/.profile is executed by the command interpreter for login shells.
-# This file however might, or might NOT be read by bash, if ~/.bash_profile or
-# ~/.bash_login exists. This behavior is not consistent across all distributions
-# and platforms.
-
+# vim: set filetype=sh:
 
 # Customize your shell with fancy prompt, aliases, functions etc.
 # http://askubuntu.com/a/438170

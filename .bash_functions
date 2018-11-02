@@ -230,7 +230,7 @@ function __prompt_command() {
 
     # check if inside git repo
     local git_status="`git status -unormal 2>&1`"
-    if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+    if ! [[ "$git_status" =~ [nN]ot\ a\ git\ repo ]]; then
         # parse the porcelain output of git status
         if [[ "$git_status" =~ nothing\ to\ commit ]]; then
             local Color_On=${GREEN}

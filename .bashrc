@@ -89,38 +89,37 @@ fi
 if [ "$color_prompt" = yes ]; then
     # Source: http://ascii-table.com/ansi-escape-sequences.php
     # Note: Non-printable sequences should be enclosed in \[ and \] (http://unix.stackexchange.com/a/105974).
-    #       However, \[ with \] are specific to bash and, in addition, does not seem to work properly with
-    #       bash on Mac OS. Better solution is to choose what readline understands, i.e. octal-escapes
-    #       \001+\002, or hexa-escapes \x01+\x02.
+    #       However, please note that \[ with \] are specific to bash. Better solution might be what readline
+    #       understands, i.e. octal-escapes \001+\002, or hexa-escapes \x01+\x02. Needs testing.
     # https://superuser.com/questions/301353/escape-non-printing-characters-in-a-function-for-a-bash-prompt
-    NC="\001\033[0m\002"
+    NC="\[\033[0m\]"
     # Foreground colors
-    BLACK="\001\033[0;30m\002"
-    RED="\001\033[0;31m\002"
-    GREEN="\001\033[0;32m\002"
-    YELLOW="\001\033[0;33m\002"
-    BLUE="\001\033[0;34m\002"
-    PURPLE="\001\033[0;35m\002"
-    CYAN="\001\033[0;36m\002"
-    WHITE="\001\033[0;37m\002"
+    BLACK="\[\033[0;30m\]"
+    RED="\[\033[0;31m\]"
+    GREEN="\[\033[0;32m\]"
+    YELLOW="\[\033[0;33m\]"
+    BLUE="\[\033[0;34m\]"
+    PURPLE="\[\033[0;35m\]"
+    CYAN="\[\033[0;36m\]"
+    WHITE="\[\033[0;37m\]"
     # Bold style
-    BBLACK="\001\033[1;30m\002"
-    BRED="\001\033[1;31m\002"
-    BGREEN="\001\033[1;32m\002"
-    BYELLOW="\001\033[1;33m\002"
-    BBLUE="\001\033[1;34m\002"
-    BPURPLE="\001\033[1;35m\002"
-    BCYAN="\001\033[1;36m\002"
-    BWHITE="\001\033[1;37m\002"
+    BBLACK="\[\033[1;30m\]"
+    BRED="\[\033[1;31m\]"
+    BGREEN="\[\033[1;32m\]"
+    BYELLOW="\[\033[1;33m\]"
+    BBLUE="\[\033[1;34m\]"
+    BPURPLE="\[\033[1;35m\]"
+    BCYAN="\[\033[1;36m\]"
+    BWHITE="\[\033[1;37m\]"
     # Background colors
-    ON_BLACK="\001\033[40m\002"
-    ON_RED="\001\033[41m\002"
-    ON_GREEN="\001\033[42m\002"
-    ON_YELLOW="\001\033[43m\002"
-    ON_BLUE="\001\033[44m\002"
-    ON_PURPLE="\001\033[45m\002"
-    ON_CYAN="\001\033[46m\002"
-    ON_WHITE="\001\033[47m\002"
+    ON_BLACK="\[\033[40m\]"
+    ON_RED="\[\033[41m\]"
+    ON_GREEN="\[\033[42m\]"
+    ON_YELLOW="\[\033[43m\]"
+    ON_BLUE="\[\033[44m\]"
+    ON_PURPLE="\[\033[45m\]"
+    ON_CYAN="\[\033[46m\]"
+    ON_WHITE="\[\033[47m\]"
     # Combinations
     ALERT=${BWHITE}${ON_RED}
     # Symbols (bash specific)

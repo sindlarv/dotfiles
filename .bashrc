@@ -199,3 +199,7 @@ unset less_options
 export PAGER="less"
 # Make "less" transparently handle non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe.sh ] && export LESSOPEN="|/usr/bin/lesspipe.sh %s"
+
+# Fix the annoying new behavior of GNU coreutils ls, enclosing dirs and files with single quotes
+# https://unix.stackexchange.com/a/258687
+export QUOTING_STYLE=literal

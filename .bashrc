@@ -37,18 +37,18 @@ export EDITOR="vim"
 
 # Specific and local configuration files
 
-# Local bash configuration
+# Source local bash configuration
 if [ -f ~/.bashrc_local ]; then
     . ~/.bashrc_local
 fi
 
 # Include aliases from a separate file
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
 fi
 # ... and local aliases, too
-if [ -f ~/.bash_aliases_local ]; then
-    . ~/.bash_aliases_local
+if [ -f ~/.aliases_local ]; then
+    . ~/.aliases_local
 fi
 
 # Include functions from a separate file

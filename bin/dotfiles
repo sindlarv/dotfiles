@@ -8,7 +8,7 @@
 dir=~/.dotfiles                    # dotfiles directory
 olddir=~/.backup                   # old dotfiles backup directory
 # list of files/folders to symlink in homedir
-files="bashrc vimrc vim bash_aliases bash_functions inputrc tmux.conf bash_profile gnupg gitconfig"
+files="bashrc vimrc vim aliases bash_functions inputrc tmux.conf bash_profile gnupg gitconfig"
 
 # create dotfiles_old in homedir
 echo "Creating $olddir for backup of any existing dotfiles in ~"
@@ -29,4 +29,4 @@ for file in $files; do
     ln -s $dir/.$file ~/.$file
 done
 
-echo "Required software: keychain tmux vim gpg"
+echo "Required software: keychain vim tmux (along with tpm, i.e. git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm and install the rest with prefix + I)"

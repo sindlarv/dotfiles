@@ -198,7 +198,7 @@ function f.pidof () {
 function f.passwd () {
     local length=$1
     [ "$length" == "" ] && length=8
-    tr -dc '[:alnum:]' < /dev/urandom | fold -w $length | head -1
+    LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | fold -w $length | head -1
 }
 
 

@@ -204,8 +204,10 @@ function f.passwd () {
 
 # simple calculator
 function f.calc() {
-    printf "$*\n" | bc -l
-    # optionally (( results = $1 )); echo $results (requires quoting, though)
+    operation=$1
+    places=$2
+    [ -z "$places" ] && places=0
+    printf "%.${places:-0}f\n" "$(echo "$operation" | bc -l)"
 }
 
 

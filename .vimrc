@@ -33,14 +33,14 @@ else
     set background=dark
 endif
 
-"colorscheme solarized
-colorscheme jellybeans
-"colorscheme badwolf
-
 " solarized options
-let g:solarized_contrast='high'
-let g:solarized_visibility='high'
+"let g:solarized_contrast='normal'
+"let g:solarized_visibility='high'
 "let g:solarized_termtrans=1
+
+"colorscheme solarized
+"colorscheme gruvbox
+colorscheme badwolf
 
 " vimdiff colors
 if &diff

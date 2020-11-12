@@ -262,12 +262,6 @@ function __prompt_command() {
 }
 
 
-# Simple watch within tmux
-function f.tmw() {
-    [ -n "$TMUX" ] && tmux split-window -d "$*"
-}
-
-
 # Make cd work from within a script
 # http://stackoverflow.com/a/7020787
 function f.cd() {

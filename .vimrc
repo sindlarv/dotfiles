@@ -81,19 +81,6 @@ set expandtab
 
 " textwidth and format options
 "set textwidth=80
-" show line at 80 chars, requires VIm 7.3+
-"if v:version >= 730
-if exists('+colorcolumn')
-    "set colorcolumn=80
-    " or you can base the value of 'colorcolumn' on 'textwidth'
-    "set colorcolumn=+1
-    "highlight ColorColumn ctermbg=235 guibg=#2c2d27
-    let &colorcolumn=join(range(81,999),",")
-    "we can also have two color zones (warning|danger?)
-    "let &colorcolumn="81,".join(range(121,999),",")
-else
-    autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-endif
 
 " characters at 80+ column
 map <F12> :/\%>80v./+<CR>

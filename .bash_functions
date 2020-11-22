@@ -207,7 +207,7 @@ function f.calc() {
     operation=$1
     places=$2
     [ -z "$places" ] && places=0
-    printf "%.${places:-0}f\n" "$(echo "$operation" | bc -l)"
+    LC_NUMERIC=C printf "%.${places:-0}f\n" "$(echo "$operation" | bc -l)"
 }
 
 

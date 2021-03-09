@@ -69,16 +69,17 @@ function f.unarc() {
 
 # quick and dirty archiver
 function f.arc () {
-    declare stamp= directory= extension='bz2' compress='j' verbose= delete= target=
+    declare stamp= directory= extension='gz' compress='z' verbose= delete= target=
     declare platform=$(uname -s)
     OPTIND=1
-    while getopts "d:f:bzsvr" Option; do
+    while getopts "d:f:jzsvrJ" Option; do
 #        echo "Reading option: $Option $OPTIND $OPTARG" >&2
         case $Option in
             s) stamp=".[`date +%F_%H:%M`]";;
             d) directory=$OPTARG;;
-            b) compress='j'; extension='bz2';;
+            j) compress='j'; extension='bz2';;
             z) compress='z'; extension='gz';;
+            J) compress='J'; extension='xz';;
             v) verbose='v';;
             r) delete='--remove-files';;
             f) target=$OPTARG;;
@@ -86,9 +87,11 @@ function f.arc () {
         esac
     done
 #    echo "OPTIND: $OPTIND" >&2
-    [ -z $directory ] && echo "*** Specify a directory with the -d option." >&2 && return 91
-    [ ! -d $directory ] && echo "*** I make archives out of *directories* [$directory]." >&2 && return 97
-    [ -z $target ] && target="`basename "${directory}"`${stamp}.tar.$extension"
+    [ -z "$directory" ] && echo "*** Specify a directory with the -d option" >&2 && return 91
+    [ "$directory" == "." ] && [ -z $target ] && echo "*** Set target with the -f option to avoid adding archive to itself" >&2 && return 91
+    [ ! -d "$directory" ] && echo "*** I make archives out of *directories* [$directory]" >&2 && return 97
+    [ -d "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
+    [ -z "$target" ] && target="`basename "${directory}"`${stamp}.t$extension"
 #    echo "Directory: $directory" >&2
     echo "Target: $target" >&2
     if [ -n "$delete" ] && [ "$platform" == "OpenBSD" ]; then

@@ -190,7 +190,7 @@ function f.scp () {
 # send HUP to the named process
 function f.pidof () {
     if [ $(type -p pgrep) ]; then
-        pgrep -d, $1 | tr ',' ' '
+        pgrep -x $1
     else
         echo "*** pgrep not available"
     fi

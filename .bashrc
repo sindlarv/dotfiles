@@ -177,7 +177,7 @@ fi
 less_options=(
 # If the entire text fits on one screen, just show it and quit. (Be more like
 # "cat" and less like "more".)
-    --quit-if-one-screen
+#    --quit-if-one-screen
 
 # Do not clear the screen first.
     --no-init

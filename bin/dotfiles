@@ -11,6 +11,7 @@ files="bashrc vimrc vim aliases bash_functions inputrc tmux.conf bash_profile gn
 # Create required directories in homedir
 echo "Creating $olddir to backup existing dotfiles in homedir"
 mkdir -p $olddir $HOME/.gnupg
+chmod 700 $HOME/.gnupg
 echo "... done"
 
 # Move dotfiles to be changed to backup directory
@@ -33,4 +34,4 @@ echo "... done"
 # Display requirements and tips
 echo "Required software: keychain, vim, tmux (along with tpm aka Tmux Plugin Manager)"
 echo " - git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
-echo " - install the pre-configured plugins with tmux prefix key + I)"
+echo " - install the pre-configured plugins with tmux prefix key + I"

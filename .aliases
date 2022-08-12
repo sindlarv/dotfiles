@@ -102,7 +102,7 @@ fi
 
 # 't' - todo list manager
 # https://github.com/sjl/t
-if [ -e ~/bin/t/t.py ]; then
-    alias t='python ~/bin/t/t.py --task-dir ~/tasks --list tasks'
+if [ -e ~/.local/bin/t/t.py ]; then
+    alias t='python ~/.local/bin/t/t.py --task-dir ~/tasks --list tasks'
     #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
 fi

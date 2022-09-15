@@ -221,7 +221,7 @@ function __prompt_command() {
     EXIT="$?"
     PS1=""
 
-    if [ -f ~/bin/t/t.py ]; then PS1+="[$(t | wc -l | sed -e's/ *//')] "; fi
+    command -v t >/dev/null 2>&1 && PS1+="[$(t | wc -l | sed -e's/ *//')] "
 
     # if logged in via ssh shows the ip of the client
     if [ -n "${SSH_CLIENT}" ]; then PS1+="${YELLOW}("${SSH_CLIENT%% *}")${NC} "; fi

@@ -32,6 +32,6 @@ done
 echo "... done"
 
 # Display requirements and tips
-echo "Required software: keychain, vim, tmux (along with tpm aka Tmux Plugin Manager), bc (missing in some Linux distributions)"
+echo "Required software: keychain, vim, tmux (along with tpm aka Tmux Plugin Manager), xclip, bc (missing in some Linux distributions)"
 echo " - git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
 echo " - install the pre-configured plugins with tmux prefix key + I"

@@ -88,6 +88,7 @@ elif [ $(type -p pkg_info) ]; then
     alias pkgf='pkg_info -E'
     alias pkgi='doas pkg_add'
     alias pkgr='doas pkg_delete'
+    alias pkgu='doas pkg_add -u'
 elif [ $(type -p pkg)]; then
     alias pkgs='pkg search'
     alias pkgS='pkg info'

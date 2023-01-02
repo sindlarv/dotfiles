@@ -24,22 +24,21 @@ shopt -s checkwinsize
 # files and zero or more directories and subdirectories.
 #shopt -s globstar
 
-
-# Set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-
 # Define editor
 export EDITOR="vim"
 
+if [ -z "$TMUX" ]; then
 
-# Specific and local configuration files
+    # Source local bash configuration
+    if [ -f ~/.bashrc_local ]; then
+        . ~/.bashrc_local
+    fi
 
-# Source local bash configuration
-if [ -f ~/.bashrc_local ]; then
-    . ~/.bashrc_local
+    # Set PATH so it includes user's private bin if it exists
+    if [ -d "$HOME/.local/bin" ] ; then
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+
 fi
 
 # Include aliases from a separate file

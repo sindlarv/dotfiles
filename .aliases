@@ -81,6 +81,7 @@ elif [ $(type -p brew) ]; then
     alias pkgu='brew update'
     alias pkgU='brew upgrade'
     alias pkgd='brew deps'
+    alias pkgo='brew outdated'
 elif [ $(type -p pkg_info) ]; then
     alias pkgs='pkg_info -Q'
     alias pkgS='pkg_info'

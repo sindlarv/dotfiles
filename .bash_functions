@@ -69,7 +69,7 @@ function f.unarc() {
 
 # quick and dirty archiver
 function f.arc () {
-    declare stamp= directory= extension='gz' compress='z' verbose= delete= target=
+    declare stamp= directory= extension='gz' compress='z' verbose= delete= target= filename=
     declare platform=$(uname -s)
     OPTIND=1
     while getopts "d:f:jzsvrJ" Option; do
@@ -91,7 +91,9 @@ function f.arc () {
     ( [ "$directory" == "." ] && [ -z $target ] ) && echo "*** Set target with the -f option to avoid adding archive to itself" >&2 && return 91
     [ ! -d "$directory" ] && echo "*** I make archives out of *directories* [$directory]" >&2 && return 97
     [ -d "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
-    [ -n "$stamp" ] && target="$(dirname "${target}")/$(basename "${target}")${stamp}.t$extension"
+    filename="${target##*/}"
+    [ "$filename" == "${filename%.*}" ] && filename="$filename$stamp.t$extension" || filename="${filename%.*}$stamp.${filename##*.}"
+    target="${target%/*}/$filename"
 #    echo "Directory: $directory" >&2
     echo "Target: $target" >&2
     if [ -n "$delete" ] && [ "$platform" == "OpenBSD" ]; then

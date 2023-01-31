@@ -75,7 +75,7 @@ function f.arc () {
     while getopts "d:f:jzsvrJ" Option; do
 #        echo "Reading option: $Option $OPTIND $OPTARG" >&2
         case $Option in
-            s) stamp=".[`date +%F_%H:%M`]";;
+            s) stamp=".$(date +%F_%H:%M)";;
             d) directory=$OPTARG;;
             j) compress='j'; extension='bz2';;
             z) compress='z'; extension='gz';;
@@ -91,7 +91,7 @@ function f.arc () {
     ( [ "$directory" == "." ] && [ -z $target ] ) && echo "*** Set target with the -f option to avoid adding archive to itself" >&2 && return 91
     [ ! -d "$directory" ] && echo "*** I make archives out of *directories* [$directory]" >&2 && return 97
     [ -d "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
-    [ -n "$stamp" ] && target="`dirname "${target}"`/`basename "${target}"`${stamp}.t$extension"
+    [ -n "$stamp" ] && target="$(dirname "${target}")/$(basename "${target}")${stamp}.t$extension"
 #    echo "Directory: $directory" >&2
     echo "Target: $target" >&2
     if [ -n "$delete" ] && [ "$platform" == "OpenBSD" ]; then

@@ -90,7 +90,7 @@ function f.arc () {
     [ -z "$directory" ] && echo "*** Specify a directory with the -d option" >&2 && return 91
     ( [ "$directory" == "." ] && [ -z $target ] ) && echo "*** Set target with the -f option to avoid adding archive to itself" >&2 && return 91
     [ ! -d "$directory" ] && echo "*** I make archives out of *directories* [$directory]" >&2 && return 97
-    [ -d "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
+    [ ! -f "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
     [ -z "$target" ] && target="`basename "${directory}"`${stamp}.t$extension"
 #    echo "Directory: $directory" >&2
     echo "Target: $target" >&2

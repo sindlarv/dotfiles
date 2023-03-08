@@ -67,16 +67,15 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-
 # Set terminal based on number of colors detected
-if [ "$(tput colors)c" == "256c" ]; then
+if [ -x "$(command -v tput)" ] && [ "$(tput colors)c" == "256c" ]; then
     export TERM='xterm-256color'
 else
     export TERM='xterm'
 fi
 
 # Check for color support
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+if [ -x "$(command -v tput)" ] && [ $(tput colors) -ge 8 ]; then
     # We have color support; assume it's compliant with Ecma-48 (ISO/IEC-6429).
     # (Lack of such support is extremely rare, and such a case would tend
     # to support setf rather than setaf.)
@@ -93,36 +92,7 @@ if [ "$color_prompt" = yes ]; then
     #       \x01+\x02.
     # https://superuser.com/questions/301353/escape-non-printing-characters-in-a-function-for-a-bash-prompt
     # Needs testing, as it seems that only the bash specific sequences work reliably on MacOS for me.
-    if [ "$(uname -s)" == "Linux" ]; then
-        NC="\001\033[0m\002"
-        # Foreground colors
-        BLACK="\001\033[0;30m\002"
-        RED="\001\033[0;31m\002"
-        GREEN="\001\033[0;32m\002"
-        YELLOW="\001\033[0;33m\002"
-        BLUE="\001\033[0;34m\002"
-        PURPLE="\001\033[0;35m\002"
-        CYAN="\001\033[0;36m\002"
-        WHITE="\001\033[0;37m\002"
-        # Bold style
-        BBLACK="\001\033[1;30m\002"
-        BRED="\001\033[1;31m\002"
-        BGREEN="\001\033[1;32m\002"
-        BYELLOW="\001\033[1;33m\002"
-        BBLUE="\001\033[1;34m\002"
-        BPURPLE="\001\033[1;35m\002"
-        BCYAN="\001\033[1;36m\002"
-        BWHITE="\001\033[1;37m\002"
-        # Background colors
-        ON_BLACK="\001\033[40m\002"
-        ON_RED="\001\033[41m\002"
-        ON_GREEN="\001\033[42m\002"
-        ON_YELLOW="\001\033[43m\002"
-        ON_BLUE="\001\033[44m\002"
-        ON_PURPLE="\001\033[45m\002"
-        ON_CYAN="\001\033[46m\002"
-        ON_WHITE="\001\033[47m\002"
-    elif [ "$(uname -s)" == "Darwin" ]; then
+    if [ "$(uname -s)" == "Darwin" ] || [ "$(uname -s)" == "OpenBSD" ]; then
         NC="\[\033[0m\]"
         # Foreground colors
         BLACK="\[\033[0;30m\]"
@@ -151,6 +121,35 @@ if [ "$color_prompt" = yes ]; then
         ON_PURPLE="\[\033[45m\]"
         ON_CYAN="\[\033[46m\]"
         ON_WHITE="\[\033[47m\]"
+    else
+        NC="\001\033[0m\002"
+        # Foreground colors
+        BLACK="\001\033[0;30m\002"
+        RED="\001\033[0;31m\002"
+        GREEN="\001\033[0;32m\002"
+        YELLOW="\001\033[0;33m\002"
+        BLUE="\001\033[0;34m\002"
+        PURPLE="\001\033[0;35m\002"
+        CYAN="\001\033[0;36m\002"
+        WHITE="\001\033[0;37m\002"
+        # Bold style
+        BBLACK="\001\033[1;30m\002"
+        BRED="\001\033[1;31m\002"
+        BGREEN="\001\033[1;32m\002"
+        BYELLOW="\001\033[1;33m\002"
+        BBLUE="\001\033[1;34m\002"
+        BPURPLE="\001\033[1;35m\002"
+        BCYAN="\001\033[1;36m\002"
+        BWHITE="\001\033[1;37m\002"
+        # Background colors
+        ON_BLACK="\001\033[40m\002"
+        ON_RED="\001\033[41m\002"
+        ON_GREEN="\001\033[42m\002"
+        ON_YELLOW="\001\033[43m\002"
+        ON_BLUE="\001\033[44m\002"
+        ON_PURPLE="\001\033[45m\002"
+        ON_CYAN="\001\033[46m\002"
+        ON_WHITE="\001\033[47m\002"
     fi
     # Combinations
     ALERT=${BWHITE}${ON_RED}

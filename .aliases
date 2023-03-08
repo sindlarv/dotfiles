@@ -89,6 +89,7 @@ elif [ $(type -p pkg_info) ]; then
     alias pkgf='pkg_info -E'
     alias pkgi='doas pkg_add'
     alias pkgr='doas pkg_delete'
+    alias pkgu='doas pkg_add -u'
 elif [ $(type -p pkg)]; then
     alias pkgs='pkg search'
     alias pkgS='pkg info'
@@ -104,6 +105,6 @@ fi
 # 't' - todo list manager
 # https://github.com/sjl/t
 if [ -e ~/.local/bin/t/t.py ]; then
-    alias t='~/.local/bin/t/t.py --task-dir ~/tasks --list tasks'
+    alias t='~/.local/bin/t/t.py --task-dir ~/.tasks --list tasks'
     #export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
 fi

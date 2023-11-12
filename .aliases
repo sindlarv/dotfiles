@@ -90,7 +90,7 @@ elif [ $(type -p pkg_info) ]; then
     alias pkgi='doas pkg_add'
     alias pkgr='doas pkg_delete'
     alias pkgu='doas pkg_add -u'
-elif [ $(type -p pkg)]; then
+elif [ $(type -p pkg) ]; then
     alias pkgs='pkg search'
     alias pkgS='pkg info'
     alias pkgl='pkg info --list-files'
@@ -100,6 +100,15 @@ elif [ $(type -p pkg)]; then
     alias pkga='sudo pkg autoremove'
     alias pkgu='sudo pkg update'
     alias pkgU='sudo pkg upgrade'
+elif [ $(type -p apk) ]; then
+    alias pkgs='apk search'
+    alias pkgS='apk info'
+    alias pkgl='apk info --contents'
+    alias pkgf='apk info --who-owns'
+    alias pkgi='sudo apk add'
+    alias pkgr='sudo apk del'
+    alias pkgu='sudo apk update'
+    alias pkgU='sudo apk upgrade'
 fi
 
 # 't' - todo list manager

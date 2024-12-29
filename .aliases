@@ -61,7 +61,7 @@ elif [ $(type -p rpm) ]; then
     alias pkgf='rpm -qf'
     alias pkgi='sudo rpm -iv'
     alias pkgr='sudo rpm -ev'
-elif [ $(type -p dpkg) ]; then
+elif [ $(type -p dpkg) ] && [ $(type -p apt-cache) ] && [ $(type -p apt-get) ]; then
     alias pkgs='apt-cache search'
     alias pkgS='apt-cache show'
     alias pkgl='dpkg --listfiles'

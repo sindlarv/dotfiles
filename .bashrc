@@ -171,32 +171,36 @@ fi
 /bin/stty -ixon
 
 
-# Make less the default pager, and specify some useful defaults.
-less_options=(
-# If the entire text fits on one screen, just show it and quit. (Be more like
-# "cat" and less like "more".)
-#    --quit-if-one-screen
+if [ $(type -p less) ]; then
+    # Make less the default pager, and specify some useful defaults.
+    less_options=(
+    # If the entire text fits on one screen, just show it and quit. (Be more like
+    # "cat" and less like "more".)
+    #    --quit-if-one-screen
 
-# Do not clear the screen first.
-    --no-init
+    # Do not clear the screen first.
+        --no-init
 
-# Like "smartcase" in Vim: ignore case unless the search pattern is mixed.
-    --ignore-case
+    # Like "smartcase" in Vim: ignore case unless the search pattern is mixed.
+        --ignore-case
 
-# Do not automatically wrap long lines.
-    --chop-long-lines
+    # Do not automatically wrap long lines.
+        --chop-long-lines
 
-# Allow ANSI colour escapes, but no other escapes.
-    --RAW-CONTROL-CHARS
+    # Allow ANSI colour escapes, but no other escapes.
+        --RAW-CONTROL-CHARS
 
-# Do not complain when we are on a dumb terminal.
-    --dumb
-)
-export LESS="${less_options[*]}"
-unset less_options
-export PAGER="less"
-# Make "less" transparently handle non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe.sh ] && export LESSOPEN="|/usr/bin/lesspipe.sh %s"
+    # Do not complain when we are on a dumb terminal.
+        --dumb
+    )
+    export LESS="${less_options[*]}"
+    unset less_options
+    export PAGER="less"
+    # Make "less" transparently handle non-text input files, see lesspipe(1)
+    [ -x /usr/bin/lesspipe.sh ] && export LESSOPEN="|/usr/bin/lesspipe.sh %s"
+else
+    export PAGER="more"
+fi
 
 # Fix the annoying new behavior of GNU coreutils ls, enclosing dirs and files with single quotes
 # https://unix.stackexchange.com/a/258687

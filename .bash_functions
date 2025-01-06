@@ -1,7 +1,8 @@
 # vim: set filetype=sh:
 
 # find duplicate files without 'fdupes'
-# http://dotfiles.org/~samba/.bash_aliases
+# source: http://dotfiles.org/~samba/.bash_aliases
+# example: f.dupes /some/dir
 function f.dupes () {
     platform=$(uname -s)
     case $platform in
@@ -11,18 +12,17 @@ function f.dupes () {
 
     echo "Scanning for duplicates: $@"
     #find $@ -type f -exec $cmd_hash {} \; | sort -k 1 | uniq -w 32 -D
-    # ... or a bit more complicated but portable
-    #echo "dir: \"$@\""
-    IFS=$'\n'; for i in $(find $@ -type f -exec $cmd_hash {} \; | sort -k 1 \
-    | awk 'seen[$1]++ == 1 { print $1 }'); do
-        for j in $(find $@ -type f -exec $cmd_hash {} \; | sort -k 1); do
-            echo $j | grep $i
-        done
-    done; unset IFS
+    # ... or a bit more complicated (and slower) but portable
+    filelist_all=$(find $@ -type f -print0 | xargs -0 $cmd_hash | sort -k 1 | awk '{ print $1 "|" $2 }')
+    filelist_unq=$(echo $filelist_all | tr ' ' '\n' | awk -F"|" 'seen[$1]++ == 1 { print $1 }')
+    for i in $filelist_unq; do
+        echo $filelist_all | tr ' ' '\n' | sed 's/|/  /' | grep ^$i
+    done
 }
 
 
 # for each stdin; execute this command... like xargs
+# example: echo /usr /home /tmp | f.each ls -l
 function f.each () {
     singular=0; items=$(mktemp)
     while getopts ":s" Option; do
@@ -145,17 +145,17 @@ function f.ssh_tunnel () {
 
 
 # open terminals over a tunnel
+# example: f.ssh -d user@dest -g user@gateway
 function f.ssh () {
-    # example: f.ssh -d user@dest -g user@gateway
     # grab/create a tunnel and connect
     $(f.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }')
 }
 
 
 # push files over a tunnel to another machine
+# example: f.scp -d user@dest:/path/to/target -g user@gateway /path/to/recv/local
+# example: f.scp [/path/to/send/local/*...] user@dest:/path/to/target user@gateway
 function f.scp () {
-    # example: f.scp -d user@dest:/path/to/target -g user@gateway /path/to/recv/local
-    # example: f.scp [/path/to/send/local/*...] user@dest:/path/to/target user@gateway
 
     declare -a files
     declare mode= scp_tunnel= scp_cmd=

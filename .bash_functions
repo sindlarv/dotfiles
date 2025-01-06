@@ -191,16 +191,6 @@ function f.scp () {
 }
 
 
-# send HUP to the named process
-function f.pidof () {
-    if [ $(type -p pgrep) ]; then
-        pgrep -x $1
-    else
-        echo "*** pgrep not available"
-    fi
-}
-
-
 # create random password
 # example: f.passwd 16
 function f.passwd () {

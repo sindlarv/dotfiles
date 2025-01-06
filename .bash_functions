@@ -37,7 +37,7 @@ function f.each () {
 
     [ $singular -ne 0 ] && $@ $(cat $items);
 
-    rm $items
+    rm -f $items
 }
 
 
@@ -137,7 +137,7 @@ function f.ssh_tunnel () {
         ssh -NfL ${gwport}:${DestHost}:22 ${GWUser}@${GWHost}
     fi
     # clear our data from the disk
-    rm ${usedports}
+    rm -f ${usedports}
 
     # print the connection info
     echo "${DestUser}@localhost ${gwport}";

@@ -24,7 +24,7 @@ function f.dupes () {
 
 # for each stdin; execute this command... like xargs
 function f.each () {
-    singular=0; items=`mktemp`
+    singular=0; items=$(mktemp)
     while getopts ":s" Option; do
         case $Option in
             s) singular=1;;
@@ -35,7 +35,7 @@ function f.each () {
         [ $singular -eq 0 ] && $@ $item || echo $item > $items;
     done
 
-    [ $singular -ne 0 ] && $@ `cat $items`;
+    [ $singular -ne 0 ] && $@ $(cat $items);
 
     rm $items
 }
@@ -106,7 +106,7 @@ function f.arc () {
 
 # opens/selects tunnels as specified
 function f.ssh_tunnel () {
-    declare usedports=`mktemp` gwport=$(( RANDOM + 1024 )) Destination= GWUser=${SSHDefaultGateway%%@*} GWHost=${SSHDefaultGateway##*@};
+    declare usedports=$(mktemp) gwport=$(( RANDOM + 1024 )) Destination= GWUser=${SSHDefaultGateway%%@*} GWHost=${SSHDefaultGateway##*@};
     # parse the arguments
     OPTIND=1
     while getopts "g:d:" Option; do
@@ -123,13 +123,13 @@ function f.ssh_tunnel () {
 
     # make sure we're not trying to bind to an occupied port
     netstat -natl | sed '1,2d' | awk '{print $4}' | sed -r 's/(.*):([0-9]+)/\2/' | sort | uniq > ${usedports}
-    while [ `grep ${gwport} ${usedports}` ]; do gwport=$(( RANDOM + 1024 )); done
+    while [ $(grep ${gwport} ${usedports}) ]; do gwport=$(( RANDOM + 1024 )); done
 
     # search for existing tunnels to destination, using the same gateway
-    `which ps | grep ps` -o pid,command -C ssh | grep -E "[0-9]+:${DestHost}:22 ${GWUser}@${GWHost}" > ${usedports}
-    if [[ `wc -l ${usedports} | cut -d' ' -f1` -gt "0" ]]; then
+    $(which ps | grep ps) -o pid,command -C ssh | grep -E "[0-9]+:${DestHost}:22 ${GWUser}@${GWHost}" > ${usedports}
+    if [[ $(wc -l ${usedports} | cut -d' ' -f1) -gt "0" ]]; then
         # use existing tunnel
-        gwport=`sed -r "s/^(.*) ([0-9]+):${DestHost}:22 (.*)$/\2/" ${usedports}`
+        gwport=$(sed -r "s/^(.*) ([0-9]+):${DestHost}:22 (.*)$/\2/" ${usedports})
         echo "Found gateway port: ${gwport}">&2
     else
         # create a new tunnel
@@ -148,7 +148,7 @@ function f.ssh_tunnel () {
 function f.ssh () {
     # example: f.ssh -d user@dest -g user@gateway
     # grab/create a tunnel and connect
-    `f.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }'`
+    $(f.ssh_tunnel $@ | awk '{ printf ( "ssh %s -p %d" , $1, $2 ); }')
 }
 
 
@@ -178,7 +178,7 @@ function f.scp () {
     done
 
     # grab/create a tunnel
-    tunnel=`f.ssh_tunnel -d ${destination%%:*} -g ${gateway%%:*}`
+    tunnel=$(f.ssh_tunnel -d ${destination%%:*} -g ${gateway%%:*})
 
     [[ $mode == 'send' ]] && scp_cmd="scp ${files[@]} ${tunnel}";
     [[ $mode == 'recv' ]] && scp_cmd="scp ${tunnel} ${files[@]}";
@@ -235,7 +235,7 @@ function __prompt_command() {
     PS1+="${GREEN}\u${NC} ${BLUE}\w${NC} "
 
     # check if inside git repo
-    local git_status="`git status -unormal 2>&1`"
+    local git_status="$(git status -unormal 2>&1)"
     if ! [[ "$git_status" =~ [nN]ot\ a\ git\ repo ]]; then
         # parse the porcelain output of git status
         if [[ "$git_status" =~ nothing\ to\ commit ]]; then
@@ -250,7 +250,7 @@ function __prompt_command() {
             branch=${BASH_REMATCH[1]}
         else
             # Detached HEAD. (branch=HEAD is a faster alternative.)
-            branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
+            branch="($(git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD))"
         fi
 
         # add the result to prompt
@@ -282,12 +282,12 @@ function f.abspath() {
         cd "$1"
         dirs -l +0
     else
-        cd "`dirname \"$1\"`"
-        cur_dir=`dirs -l +0`
+        cd "$(dirname \"$1\")"
+        cur_dir=$(dirs -l +0)
         if [ "$cur_dir" == "/" ]; then
-            echo "$cur_dir`basename \"$1\"`"
+            echo "$cur_dir$(basename \"$1\")"
         else
-            echo "$cur_dir/`basename \"$1\"`"
+            echo "$cur_dir/$(basename \"$1\")"
         fi
     fi
     popd > /dev/null

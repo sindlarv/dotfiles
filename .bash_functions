@@ -42,6 +42,7 @@ function f.each () {
 
 
 # quick and dirty unarchiver
+# example: f.unarc /some/dir/file.tgz
 function f.unarc() {
     if [ -e "$1" ]; then
         case $1 in
@@ -68,6 +69,7 @@ function f.unarc() {
 
 
 # quick and dirty archiver
+# example: f.arc -d /dir/to/be/compressed -f ./archived.tgz
 function f.arc () {
     declare stamp= directory= extension='gz' compress='z' verbose= delete= target= filename=
     declare platform=$(uname -s)
@@ -200,6 +202,7 @@ function f.pidof () {
 
 
 # create random password
+# example: f.passwd 16
 function f.passwd () {
     local length=$1
     [ "$length" == "" ] && length=8
@@ -208,6 +211,7 @@ function f.passwd () {
 
 
 # simple calculator
+# example: f.calc 155/66 2
 function f.calc() {
     operation=$1
     places=$2
@@ -275,7 +279,8 @@ function f.cd() {
 
 
 # Canonicalize paths
-# https://superuser.com/a/218684
+# source: https://superuser.com/a/218684
+# example: f.abspath /some/dir
 function f.abspath() {
     pushd . > /dev/null
     if [ -d "$1" ]; then

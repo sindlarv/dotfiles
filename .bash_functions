@@ -1,23 +1,31 @@
 # vim: set filetype=sh:
 
-# find duplicate files without 'fdupes'
-# source: http://dotfiles.org/~samba/.bash_aliases
-# example: f.dupes /some/dir
-function f.dupes () {
-    platform=$(uname -s)
-    case $platform in
-        Linux) cmd_hash="md5sum";;
-        OpenBSD) cmd_hash="md5 -r";;
-    esac
 
-    echo "Scanning for duplicates: $@"
-    #find $@ -type f -exec $cmd_hash {} \; | sort -k 1 | uniq -w 32 -D
-    # ... or a bit more complicated (and slower) but portable
-    filelist_all=$(find $@ -type f -print0 | xargs -0 $cmd_hash | sort -k 1 | awk '{ print $1 "|" $2 }')
-    filelist_unq=$(echo $filelist_all | tr ' ' '\n' | awk -F"|" 'seen[$1]++ == 1 { print $1 }')
-    for i in $filelist_unq; do
-        echo $filelist_all | tr ' ' '\n' | sed 's/|/  /' | grep ^$i
-    done
+# Make cd work from within a script
+# http://stackoverflow.com/a/7020787
+function f.cd() {
+    cd ${1}
+}
+
+
+# Canonicalize paths
+# source: https://superuser.com/a/218684
+# example: f.abspath /some/dir
+function f.abspath() {
+    pushd . > /dev/null
+    if [ -d "$1" ]; then
+        cd "$1"
+        dirs -l +0
+    else
+        cd "$(dirname \"$1\")"
+        cur_dir=$(dirs -l +0)
+        if [ "$cur_dir" == "/" ]; then
+            echo "$cur_dir$(basename \"$1\")"
+        else
+            echo "$cur_dir/$(basename \"$1\")"
+        fi
+    fi
+    popd > /dev/null
 }
 
 
@@ -38,6 +46,27 @@ function f.each () {
     [ $singular -ne 0 ] && $@ $(cat $items);
 
     rm -f $items
+}
+
+
+# find duplicate files without 'fdupes'
+# source: http://dotfiles.org/~samba/.bash_aliases
+# example: f.dupes /some/dir
+function f.dupes () {
+    platform=$(uname -s)
+    case $platform in
+        Linux) cmd_hash="md5sum";;
+        OpenBSD) cmd_hash="md5 -r";;
+    esac
+
+    echo "Scanning for duplicates: $@"
+    #find $@ -type f -exec $cmd_hash {} \; | sort -k 1 | uniq -w 32 -D
+    # ... or a bit more complicated (and slower) but portable
+    filelist_all=$(find $@ -type f -print0 | xargs -0 $cmd_hash | sort -k 1 | awk '{ print $1 "|" $2 }')
+    filelist_unq=$(echo $filelist_all | tr ' ' '\n' | awk -F"|" 'seen[$1]++ == 1 { print $1 }')
+    for i in $filelist_unq; do
+        echo $filelist_all | tr ' ' '\n' | sed 's/|/  /' | grep ^$i
+    done
 }
 
 
@@ -260,32 +289,3 @@ function __prompt_command() {
     # signalize logging
     if [ "$(ps -o comm= -p $PPID)" = "script" ]; then PS1+="(${ALERT}*${NC}) "; fi
 }
-
-
-# Make cd work from within a script
-# http://stackoverflow.com/a/7020787
-function f.cd() {
-    cd ${1}
-}
-
-
-# Canonicalize paths
-# source: https://superuser.com/a/218684
-# example: f.abspath /some/dir
-function f.abspath() {
-    pushd . > /dev/null
-    if [ -d "$1" ]; then
-        cd "$1"
-        dirs -l +0
-    else
-        cd "$(dirname \"$1\")"
-        cur_dir=$(dirs -l +0)
-        if [ "$cur_dir" == "/" ]; then
-            echo "$cur_dir$(basename \"$1\")"
-        else
-            echo "$cur_dir/$(basename \"$1\")"
-        fi
-    fi
-    popd > /dev/null
-}
-

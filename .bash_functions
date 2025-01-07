@@ -71,7 +71,7 @@ function f.unarc() {
 # quick and dirty archiver
 # example: f.arc -d /dir/to/be/compressed -f ./archived.tgz
 function f.arc () {
-    declare stamp= directory= extension='gz' compress='z' verbose= delete= target= filename=
+    declare stamp= directory= extension='gz' compress='z' verbose= delete= target= arcname= arcpath=
     declare platform=$(uname -s)
     OPTIND=1
     while getopts "d:f:jzsvrJ" Option; do
@@ -90,14 +90,15 @@ function f.arc () {
     done
 #    echo "OPTIND: $OPTIND" >&2
     [ -z "$directory" ] && echo "*** Specify a directory with the -d option" >&2 && return 91
-    ( [ "$directory" == "." ] && [ -z $target ] ) && echo "*** Set target with the -f option to avoid adding archive to itself" >&2 && return 91
-    [ ! -d "$directory" ] && echo "*** I make archives out of *directories* [$directory]" >&2 && return 97
+    [ ! -d "$directory" ] && echo "*** Specify a *directory* [$directory]" >&2 && return 97
+    [ -z $target ] && target="./$(f.abspath $directory | awk -F'/' '{ print $NF }')"
     [ -d "$target" ] && echo "*** Target must be a *file* [$target]" >&2 && return 97
-    filename="${target##*/}"
-    [ "$filename" == "${filename%.*}" ] && filename="$filename$stamp.t$extension" || filename="${filename%.*}$stamp.${filename##*.}"
-    target="${target%/*}/$filename"
-#    echo "Directory: $directory" >&2
-    echo "Target: $target" >&2
+    arcname="$(basename $target)"
+    [ "$arcname" == "${arcname%.*}" ] && arcname="$arcname$stamp.t$extension" || arcname="${arcname%.*}$stamp.${arcname##*.}"
+    arcpath="$(dirname $target)"
+    [ "$directory" == "$arcpath" ] && echo "*** Set target to avoid adding archive to itself" >&2 && return 91
+    target="$arcpath/$arcname"
+    echo "Directory: $directory, Target: $target" >&2
     if [ -n "$delete" ] && [ "$platform" == "OpenBSD" ]; then
         echo "*** File removal is not supported on $platform" && return 2
     else
